@@ -7,6 +7,10 @@ public class GunController : MonoBehaviour {
 	private float minFOV = 40;
 	private float zoomSpeed = 2;
 
+	public GameObject bulletPrefab;
+	public Transform bulletSpawn;
+	public float bulletSpeed = 8;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -15,8 +19,8 @@ public class GunController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
-			//Debug.Log("Shooting");
-
+			Debug.Log("Shooting");
+			Fire();
 		}
 		if (Input.GetMouseButtonDown (1)) {
 			//Debug.Log ("Aiming Down Sights");
@@ -43,5 +47,19 @@ public class GunController : MonoBehaviour {
 			}
 
 		}
+	}
+
+	void Fire() {
+		// Create the Bullet from the Bullet Prefab
+		var bullet = (GameObject)Instantiate (
+			bulletPrefab,
+			bulletSpawn.position,
+			bulletSpawn.rotation);
+
+		// Add velocity to the bullet
+		bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * bulletSpeed;
+
+		// Destroy the bullet after 2 seconds
+		Destroy(bullet, 8.0f);
 	}
 }
