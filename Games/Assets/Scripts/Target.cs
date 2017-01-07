@@ -15,9 +15,11 @@ public class Target : MonoBehaviour {
 		if (col.gameObject.name == "Bullet(Clone)") {
 			//Debug.Log ("Bullet hit target");
 			if (gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhit.name + " (Instance)")) {
+				col.gameObject.GetComponent<Renderer> ().material = targetHit;
 				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetHit;
 			} else {
 				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetUnhit;
+				col.gameObject.GetComponent<Renderer> ().material = targetUnhit;
 			}
 		}
 	}
