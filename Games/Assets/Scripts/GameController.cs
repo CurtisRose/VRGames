@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Vector3 position = new Vector3 (0, 2, 5);
-		var target = (GameObject)Instantiate (
+		Instantiate (
 			targetPrefab,
 			position,
 			Quaternion.identity);

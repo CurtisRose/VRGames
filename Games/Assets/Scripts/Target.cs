@@ -3,24 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Target : MonoBehaviour {
-	public Material targetUnhit;
-	public Material targetHit;
+	public Material targetUnhitRed;
+	public Material targetHitGreen;
 
 	// Use this for initialization
 	void Start () {
-		gameObject.transform.GetChild(0).GetComponent<Renderer>().material = targetUnhit;
+		gameObject.transform.GetChild(0).GetComponent<Renderer>().material = targetUnhitRed;
 	}
 
 	void OnCollisionEnter (Collision col) {
+		//Debug.Log (col.gameObject.name);
 		if (col.gameObject.name == "Bullet(Clone)") {
 			//Debug.Log ("Bullet hit target");
-			if (gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhit.name + " (Instance)")) {
-				col.gameObject.GetComponent<Renderer> ().material = targetHit;
-				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetHit;
+			//Debug.Log("\n\n===============================");
+			//Debug.Log(gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name + " == " +  targetUnhitRed.name + " (Instance)" + " == " + targetHitGreen.name);
+			col.gameObject.GetComponent<Rigidbody> ().useGravity = true;
+			if (gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhitRed.name + " (Instance)")) {
+				col.gameObject.GetComponent<Renderer> ().material = targetHitGreen;
+				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetHitGreen;
 			} else {
-				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetUnhit;
-				col.gameObject.GetComponent<Renderer> ().material = targetUnhit;
+				col.gameObject.GetComponent<Renderer> ().material = targetUnhitRed;
+				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetUnhitRed;
 			}
+			//Debug.Log(gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name + " == " +  targetUnhitRed.name + " (Instance)" + " == " + targetHitGreen.name + " (Instance)");
 		}
 	}
 
