@@ -19,8 +19,8 @@ public class GunController : MonoBehaviour {
 
 	private int fireToggle = 0; //0 single, 1 burst, 2 auto
 	private float time;
-	private float rateOfFire = 0.15f;
-	private int burstCount = 5;
+	private float rateOfFire = 0.0f;
+	private int burstCount = 50;
 
 	float timeToGo;
 
@@ -33,7 +33,7 @@ public class GunController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Toggling Rate of Fire
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKeyDown(KeyCode.E)) {
 			if (fireToggle == 0) {
 				fireToggle = 1;
 				transform.GetChild (4).GetComponent<Renderer>().material = burstFireColor;
