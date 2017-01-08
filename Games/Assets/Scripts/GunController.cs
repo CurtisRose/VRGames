@@ -17,12 +17,19 @@ public class GunController : MonoBehaviour {
 	public Material burstFireColor;
 	public Material singleFireColor;
 
+	public GameObject rifleTargetAim;
+	public GameObject rifleTargetHip;
+
 	private int fireToggle = 0; //0 single, 1 burst, 2 auto
 	private float time;
 	private float rateOfFire = 0.0f;
 	private int burstCount = 50;
+	private float aimSpeed = 0.04f;
 
 	float timeToGo;
+
+	static Vector3 aimingDownSights = new Vector3(-.264f, .2f, 0.1f);
+
 
 	// Use this for initialization
 	void Start () {
@@ -64,12 +71,17 @@ public class GunController : MonoBehaviour {
 		}
 
 		// Aiming Down Sights
-		if (Input.GetMouseButtonDown (1)) {
-			//Debug.Log ("Aiming Down Sights");
-			transform.Translate (-.264f, .2f, 0.1f);
+		if (Input.GetMouseButton (1)) {
+			//Debug.Log ("Aiming In");
+			Vector3 velocity = Vector3.zero;
+			transform.position = Vector3.SmoothDamp (transform.position, 
+				rifleTargetAim.transform.position, ref velocity, aimSpeed);
 		}
-		else if (Input.GetMouseButtonUp (1)) {
-			transform.Translate (.264f, -.2f, -0.1f);
+		else {
+			//Debug.Log ("Aiming Out");
+			Vector3 velocity = Vector3.zero;
+			transform.position = Vector3.SmoothDamp (transform.position, 
+				rifleTargetHip.transform.position, ref velocity, aimSpeed);
 		}
 		if (Input.GetMouseButton(1)) {
 			if (Camera.main.fieldOfView >= minFOV) {

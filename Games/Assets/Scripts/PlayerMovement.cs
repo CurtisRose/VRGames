@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour {
 	public float playerMovementSpeed = 2.0f;
 	public float jumpVelocity = 300.0f;
 	public bool jumping = false;
-	public bool doubleJump = false;
+	public bool doubleJumping = false;
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour {
 		//Debug.Log ("Collision");
 		if (col.collider.tag == "Ground") {
 			jumping = false;
-			doubleJump = false;
+			doubleJumping = false;
 		}
 	}
 	
@@ -41,12 +41,12 @@ public class PlayerMovement : MonoBehaviour {
 			transform.Translate(playerMovementSpeed * Vector3.right * Time.deltaTime);
 		}
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			Debug.Log (jumping);
+			//Debug.Log (jumping);
 			if (!jumping) {
 				jumping = true;
 				Jump ();
-			} else if (jumping && !doubleJump) {
-				doubleJump = true;
+			} else if (jumping && !doubleJumping) {
+				doubleJumping = true;
 				Jump ();
 			}
 		}

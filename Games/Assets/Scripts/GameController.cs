@@ -7,6 +7,13 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		// Make full screen
+		Screen.fullScreen = true;
+		// Do not display cursor
+		Cursor.visible = false;
+
+
+		// Add target
 		Vector3 position = new Vector3 (0, 2, 5);
 		Instantiate (
 			targetPrefab,
