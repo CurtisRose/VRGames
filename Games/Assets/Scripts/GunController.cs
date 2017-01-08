@@ -22,7 +22,7 @@ public class GunController : MonoBehaviour {
 
 	private int fireToggle = 0; //0 single, 1 burst, 2 auto
 	private float time;
-	private float rateOfFire = 0.0f;
+	private float rateOfFire = 0.1f;
 	private int burstCount = 50;
 	private float aimSpeed = 0.04f;
 

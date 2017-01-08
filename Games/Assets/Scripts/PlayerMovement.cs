@@ -6,11 +6,17 @@ public class PlayerMovement : MonoBehaviour {
 	float playerMovementSpeed = 3.0f;
 	float sprintingSpeed = 3.0f;
 	float aimingSpeed = 1.0f;
+	float crouchingSpeed = 1.0f;
 	float jumpVelocity = 300.0f;
 	bool jumping = false;
 	bool doubleJumping = false;
 	bool sprinting = false;
 	bool aiming = false;
+	bool crouching = false;
+
+	public GameObject crouchingPosition;
+	public GameObject standingPosition;
+	float crouchTime = 0.04f;
 
 	// Use this for initialization
 	void Start () {
@@ -66,18 +72,37 @@ public class PlayerMovement : MonoBehaviour {
 			}
 		}
 		if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1)) {
-			Debug.Log("Sprinting");
+			//Debug.Log("Sprinting");
 			if (!sprinting) {
 				sprinting = true;
 				playerMovementSpeed += sprintingSpeed;
 			}
 		}
 		else {
-			Debug.Log("Walking");
+			//Debug.Log("Walking");
 			if (sprinting) {
 				sprinting = false;
 				playerMovementSpeed -= sprintingSpeed;
 			}
+		}
+		if (Input.GetKey (KeyCode.LeftControl)) {
+			if (!crouching) {
+				Debug.Log ("Crouching");
+				crouching = true;
+				playerMovementSpeed -= crouchingSpeed;
+			}
+			Vector3 velocity = Vector3.zero;
+			transform.GetChild(0).position = Vector3.SmoothDamp (transform.GetChild(0).position, 
+				crouchingPosition.transform.position, ref velocity, crouchTime);
+		} else {
+			if (crouching) {
+				Debug.Log ("Walking");
+				crouching = false;
+				playerMovementSpeed += crouchingSpeed;
+			}
+			Vector3 velocity = Vector3.zero;
+			transform.GetChild(0).position = Vector3.SmoothDamp (transform.GetChild(0).position, 
+				standingPosition.transform.position, ref velocity, crouchTime);
 		}
 	}
 	
