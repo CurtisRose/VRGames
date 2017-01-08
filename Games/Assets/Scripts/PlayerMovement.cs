@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-	public float playerMovementSpeed = 2.0f;
-	public float jumpVelocity = 300.0f;
-	public bool jumping = false;
-	public bool doubleJumping = false;
+	float playerMovementSpeed = 3.0f;
+	float sprintingSpeed = 3.0f;
+	float aimingSpeed = 1.0f;
+	float jumpVelocity = 300.0f;
+	bool jumping = false;
+	bool doubleJumping = false;
+	bool sprinting = false;
+	bool aiming = false;
 
 	// Use this for initialization
 	void Start () {
@@ -48,6 +52,31 @@ public class PlayerMovement : MonoBehaviour {
 			} else if (jumping && !doubleJumping) {
 				doubleJumping = true;
 				Jump ();
+			}
+		}
+		if (Input.GetMouseButton (1)) {
+			if (!aiming) {
+				aiming = true;
+				playerMovementSpeed -= aimingSpeed;
+			}
+		} else {
+			if (aiming) {
+				aiming = false;
+				playerMovementSpeed += aimingSpeed;
+			}
+		}
+		if (Input.GetKey(KeyCode.LeftShift) && !Input.GetMouseButton(1)) {
+			Debug.Log("Sprinting");
+			if (!sprinting) {
+				sprinting = true;
+				playerMovementSpeed += sprintingSpeed;
+			}
+		}
+		else {
+			Debug.Log("Walking");
+			if (sprinting) {
+				sprinting = false;
+				playerMovementSpeed -= sprintingSpeed;
 			}
 		}
 	}
