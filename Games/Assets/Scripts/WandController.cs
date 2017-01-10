@@ -4,53 +4,88 @@ using UnityEngine;
 
 public class WandController : MonoBehaviour {
 	private SteamVR_TrackedObject trackedObj;
-	private GameObject collidingObject; // Object being touched by controller.
-	private GameObject objectInHand; // Object held by controller.
 	private SteamVR_Controller.Device controller {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
 
+	private GameObject collidingObject; // Object being touched by controller.
+	public GameObject objectInHand; // Object held by controller.
 
+	public uint controllerNumber = 0;
+	public bool holdingItem = false;
 
 	void Awake() {
 		//Debug.Log ("Testing ControllerGrabItem Awake()");
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 	}
 
+	void Start() {
+		controllerNumber = controller.index;
+	}
+
 	// Sets up other collider as potential grab target.
 	public void OnTriggerEnter(Collider other) {
-		//Debug.Log ("Touching an object");
-		SetCollidingObject (other);
+		//Debug.Log ("Touching an object: " + other.name);
+		if (!collidingObject) {
+			SetCollidingObject (other);
+		}
 	}
 
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
 		//Debug.Log ("Still Touching an object");
-		SetCollidingObject (other);
+		if (!collidingObject) {
+			SetCollidingObject (other);
+		}
 	}
 
 	// Removes other as a potential grab target.
 	public void OnTriggerExit(Collider other) {
-		//Debug.Log ("Stopped Touching an object");
+		//Debug.Log ("Stopped Touching an object " + other.name);
 		if (!collidingObject) {
 			return;
 		}
-		collidingObject = null;
+		if (other.CompareTag ("Item")) {
+			Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
+			itemScript.Highlight (false);
+			collidingObject = null;
+		}
 	}
 
 	private void SetCollidingObject(Collider col) {
-		if (collidingObject || !col.GetComponent<Rigidbody> ()) {
-			return;
-		}
 		//Debug.Log ("Setting colliding object: " + col.gameObject);
-		collidingObject = col.gameObject;
+		if (col.CompareTag ("Item")) {
+			//Debug.Log ("testing collision");
+			Item itemScript = col.transform.GetComponent (typeof(Item)) as Item;
+			itemScript.Highlight (true);
+			collidingObject = col.gameObject;
+		}
 	}
 		
 	// Update is called once per frame
 	void Update () {
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip) && collidingObject) {
+			//Debug.Log ("Interacting with an item with grip down");
 			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
 			objectInHandScript.OnGripDown (gameObject);
+		}
+		else if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip) && objectInHand) {
+			Debug.Log ("Interacting with an item with grip down");
+			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
+			objectInHandScript.OnGripDown (gameObject);
+		}
+		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger) && collidingObject) {
+			//Debug.Log ("Interacting with an item with trigger down");
+			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
+			objectInHandScript.OnTriggerDown (gameObject);
+		}
+		if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger) && collidingObject) {
+			//Debug.Log ("Interacting with an item with trigger down");
+			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
+			objectInHandScript.OnTriggerHeld (gameObject);
+		}
+		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+			Debug.Log ("Controller: " + controllerNumber);
 		}
 	}
 
@@ -60,6 +95,14 @@ public class WandController : MonoBehaviour {
 				child.enabled = isVisible;
 			}
 		}
+	}
+
+	public Vector3 getVelocity() {
+		return controller.velocity;
+	}
+
+	public Vector3 getAngularVelocity() {
+		return controller.angularVelocity;
 	}
 }
 
