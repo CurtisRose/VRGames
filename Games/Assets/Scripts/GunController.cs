@@ -59,6 +59,7 @@ public class GunController : Item {
 			bulletPrefab,
 			bulletSpawn.position,
 			bulletSpawn.rotation);
+		Physics.IgnoreCollision (bullet.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
 		// Add velocity to the bullet
 		bullet.GetComponent<Rigidbody> ().AddForce(bullet.transform.forward * bulletSpeed);
 		// Destroy the bullet after 8 seconds
@@ -144,14 +145,10 @@ public class GunController : Item {
 			isHeld = false;
 			controllerScipt.holdingItem = false;
 			controllerNumberHolding = 0;
+			controllerScipt.objectInHand = null;
 
 			controllerScipt.SetControllerVisible (controller, true);
 
-			/*if (gameObject.transform.parent != null) {
-				gameObject.transform.parent = null;
-			}*/
-			//gameObject.GetComponent<Rigidbody> ().useGravity = true;
-			//gameObject.GetComponent<Rigidbody> ().isKinematic = false;
 			if (GetComponent<FixedJoint> ()) {
 				GetComponent<FixedJoint> ().connectedBody = null;
 				Destroy (GetComponent<FixedJoint> ());
@@ -159,14 +156,15 @@ public class GunController : Item {
 
 			gameObject.GetComponent<Rigidbody> ().velocity = controllerScipt.getVelocity ();
 			gameObject.GetComponent<Rigidbody> ().angularVelocity = controllerScipt.getVelocity ();
+			//Highlight ();
 
 		} else if (!isHeld) {
 			if (!controllerScipt.holdingItem) {
-				Highlight (false);
 				//Debug.Log ("Picking up Gun");
 				isHeld = true;
 				controllerScipt.holdingItem = true;
 				controllerNumberHolding = controllerScipt.controllerNumber;
+				controllerScipt.objectInHand = gameObject;
 
 				controllerScipt.SetControllerVisible (controller, false);
 
@@ -185,14 +183,18 @@ public class GunController : Item {
 				FixedJoint joint = AddFixedJoint();
 				joint.connectedBody = controller.GetComponent<Rigidbody> ();
 				gameObject.transform.parent = null;
+				Highlight (false);
 			}
 		}
 	}
 
 	public override void Highlight(bool highlight) {
-		//Debug.Log ("Highlighting Laser");
-		if (highlight && !isHeld) {
-			gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = highlightMaterial;
+		if (highlight) {
+			if (!isHeld) {
+				gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = highlightMaterial;
+			} else {
+				gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = oldMaterial;
+			}
 		} else {
 			gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = oldMaterial;
 		}

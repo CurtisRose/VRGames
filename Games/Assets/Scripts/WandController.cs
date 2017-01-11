@@ -64,25 +64,39 @@ public class WandController : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
-		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip) && collidingObject) {
-			//Debug.Log ("Interacting with an item with grip down");
-			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
-			objectInHandScript.OnGripDown (gameObject);
+		if (objectInHand) {
+			//Debug.Log ("Object is in hand");
+			Item objectInHandScript = objectInHand.GetComponent (typeof(Item)) as Item;
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
+				//Debug.Log ("Interacting with an item with grip down");
+				objectInHandScript.OnGripDown (gameObject);
+			}
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
+				//Debug.Log ("Interacting with an item with trigger down");
+				objectInHandScript.OnTriggerDown (gameObject);
+			}
+			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
+				//Debug.Log ("Interacting with an item with trigger held");
+				objectInHandScript.OnTriggerHeld (gameObject);
+			}
 		}
-		else if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip) && objectInHand) {
-			Debug.Log ("Interacting with an item with grip down");
+		else if (collidingObject) {
 			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
-			objectInHandScript.OnGripDown (gameObject);
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
+				//Debug.Log ("Interacting with an item with grip down");
+				objectInHandScript.OnGripDown (gameObject);
+			}
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
+				//Debug.Log ("Interacting with an item with trigger down");
+				objectInHandScript.OnTriggerDown (gameObject);
+			}
+			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
+				//Debug.Log ("Interacting with an item with trigger down");
+				objectInHandScript.OnTriggerHeld (gameObject);
+			}
 		}
-		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger) && collidingObject) {
-			//Debug.Log ("Interacting with an item with trigger down");
-			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
-			objectInHandScript.OnTriggerDown (gameObject);
-		}
-		if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger) && collidingObject) {
-			//Debug.Log ("Interacting with an item with trigger down");
-			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
-			objectInHandScript.OnTriggerHeld (gameObject);
+		else {
+
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
 			Debug.Log ("Controller: " + controllerNumber);
