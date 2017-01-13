@@ -73,100 +73,127 @@ public class GunController : Item {
 		}
 	}
 
-	public override void OnTriggerDown(GameObject controller) {
+	public override void OnTriggerDown(WandController controller) {
 		//if (isHeld) {
 		//	Fire ();
 		//}
 	}
 
-	public override void OnTriggerUp(GameObject controller) {
+	public override void OnTriggerUp(WandController controller) {
 		//Debug.Log ("Trigger Released While Holding Gun");
 	}
 
-	public override void OnTriggerHeld(GameObject controller) {
+	public override void OnTriggerHeld(WandController controller) {
 		//Debug.Log ("Trigger Held While Holding Gun");
 		if (isHeld) {
 			AutomaticFire ();
 		}
 	}
 
-	public override void OnHairTriggerDown(GameObject controller) {
+	public override void OnHairTriggerDown(WandController controller) {
 		//Debug.Log ("Hair Trigger Pressed While Holding Gun");
 	}
 
-	public override void OnHairTriggerUp(GameObject controller) {
+	public override void OnHairTriggerUp(WandController controller) {
 		//Debug.Log ("Hair Trigger Released While Holding Gun");
 	}
 
-	public override void OnHairTriggerHeld(GameObject controller) {
+	public override void OnHairTriggerHeld(WandController controller) {
 		//Debug.Log ("Hair Trigger Held While Holding Gun");
 	}
 
-	public override void OnGripDown(GameObject controller) {
+	public override void OnGripDown(WandController controller) {
 		PickUp (controller);
 	}
 
-	public override void OnGripUp(GameObject controller) {
+	public override void OnGripUp(WandController controller) {
 		//Debug.Log ("Grip Released While Holding Gun");
 	}
 
-	public override void OnGripHeld(GameObject controller) {
+	public override void OnGripHeld(WandController controller) {
 		//Debug.Log ("Grip Held While Holding Gun");
 	}
 
-	public override void OnTouchpadDown(GameObject controller) {
+	public override void OnTouchpadDown(WandController controller) {
 		//Debug.Log ("Touchpad Pressed While Holding Gun");
 	}
 
-	public override void OnTouchpadUp(GameObject controller) {
+	public override void OnTouchpadUp(WandController controller) {
 		//Debug.Log ("Touchpad Released While Holding Gun");
 	}
 
-	public override void OnTouchpadHeld(GameObject controller) {
+	public override void OnTouchpadHeld(WandController controller) {
 		//Debug.Log ("Touchpad Held While Holding Gun");
 	}
 
-	public override void OnMenuDown(GameObject controller) {
+	public override void OnMenuDown(WandController controller) {
 		//Debug.Log ("Menu Pressed While Holding Gun");
 	}
 
-	public override void OnMenuUp(GameObject controller) {
+	public override void OnMenuUp(WandController controller) {
 		//Debug.Log ("Menu Released While Holding Gun");
 	}
 
-	public override void OnMenuHeld(GameObject controller) {
+	public override void OnMenuHeld(WandController controller) {
 		//Debug.Log ("Menu Held While Holding Gun");
 	}
 
-	protected override void PickUp(GameObject controller) {
-		WandController controllerScipt = controller.GetComponent (typeof(WandController)) as WandController;
-		if (isHeld && controllerScipt.controllerNumber == controllerNumberHolding) {
-			//Debug.Log ("Dropping Gun");
-			isHeld = false;
-			controllerScipt.holdingItem = false;
-			controllerNumberHolding = 0;
-			controllerScipt.objectInHand = null;
+	protected override void PickUp(WandController controller) {
+		if (isHeld) {
+			if (controller.controllerNumber == controllerNumberHolding) {
+				//Debug.Log ("Dropping Gun");
+				isHeld = false;
+				controller.holdingItem = false;
+				controllerNumberHolding = 0;
+				controller.objectInHand = null;
 
-			controllerScipt.SetControllerVisible (controller, true);
+				controller.SetControllerVisible (true);
 
-			if (GetComponent<FixedJoint> ()) {
-				GetComponent<FixedJoint> ().connectedBody = null;
-				Destroy (GetComponent<FixedJoint> ());
+				if (GetComponent<FixedJoint> ()) {
+					GetComponent<FixedJoint> ().connectedBody = null;
+					Destroy (GetComponent<FixedJoint> ());
+				}
+
+				gameObject.GetComponent<Rigidbody> ().velocity = controller.getVelocity ();
+				gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getVelocity ();
+				//Highlight ();
 			}
+			else {
+				//Debug.Log ("Gun Swapping Hands");
+				controller.holdingItem = true;
+				controllerNumberHolding = controller.controllerNumber;
+				controller.objectInHand = gameObject;
 
-			gameObject.GetComponent<Rigidbody> ().velocity = controllerScipt.getVelocity ();
-			gameObject.GetComponent<Rigidbody> ().angularVelocity = controllerScipt.getVelocity ();
-			//Highlight ();
+				if (gameObject.GetComponent<FixedJoint> ()) {
+					//otherControllerScript.holdingItem = false;
+					WandController oldController = gameObject.GetComponent<FixedJoint> ().connectedBody.gameObject.GetComponent<WandController>() as WandController;
+					oldController.SetControllerVisible (true);
+					oldController.holdingItem = false;
+					oldController.objectInHand = null;
+					gameObject.GetComponent<FixedJoint> ().connectedBody = null;
+					Destroy (gameObject.GetComponent<FixedJoint> ());
+				}
 
+				controller.SetControllerVisible (false);
+				gameObject.transform.parent = controller.transform;
+				Quaternion newRotation = Quaternion.Euler (-75, 180, 0);
+				gameObject.transform.rotation = controller.transform.rotation * newRotation;
+				Vector3 newPosition = new Vector3 (0.0f, -0.25f, 0.1f);
+				gameObject.transform.localPosition = newPosition;
+				FixedJoint joint = AddFixedJoint();
+				joint.connectedBody = controller.GetComponent<Rigidbody> ();
+				gameObject.transform.parent = null;
+				Highlight (false);
+			}
 		} else if (!isHeld) {
-			if (!controllerScipt.holdingItem) {
+			if (!controller.holdingItem) {
 				//Debug.Log ("Picking up Gun");
 				isHeld = true;
-				controllerScipt.holdingItem = true;
-				controllerNumberHolding = controllerScipt.controllerNumber;
-				controllerScipt.objectInHand = gameObject;
+				controller.holdingItem = true;
+				controllerNumberHolding = controller.controllerNumber;
+				controller.objectInHand = gameObject;
 
-				controllerScipt.SetControllerVisible (controller, false);
+				controller.SetControllerVisible (false);
 
 				gameObject.transform.parent = controller.transform;
 				//gameObject.GetComponent<Rigidbody> ().useGravity = false;
@@ -190,11 +217,7 @@ public class GunController : Item {
 
 	public override void Highlight(bool highlight) {
 		if (highlight) {
-			if (!isHeld) {
-				gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = highlightMaterial;
-			} else {
-				gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = oldMaterial;
-			}
+			gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = highlightMaterial;
 		} else {
 			gameObject.transform.GetChild(1).GetComponent<Renderer> ().material = oldMaterial;
 		}

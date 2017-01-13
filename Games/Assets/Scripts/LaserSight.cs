@@ -62,64 +62,64 @@ public class LaserSight : Item {
 		}
 	}
 
-	public override void OnTriggerDown(GameObject controller) {
+	public override void OnTriggerDown(WandController controller) {
 		//Debug.Log ("Turning Laser On/Off");
 		turnLaserOn ();
 	}
 
-	public override void OnTriggerUp(GameObject controller) {
+	public override void OnTriggerUp(WandController controller) {
 		
 	}
 
-	public override void OnTriggerHeld(GameObject controller) {
+	public override void OnTriggerHeld(WandController controller) {
 		
 	}
 
-	public override void OnHairTriggerDown(GameObject controller) {
+	public override void OnHairTriggerDown(WandController controller) {
 		
 	}
 
-	public override void OnHairTriggerUp(GameObject controller) {
+	public override void OnHairTriggerUp(WandController controller) {
 		
 	}
 
-	public override void OnHairTriggerHeld(GameObject controller) {
+	public override void OnHairTriggerHeld(WandController controller) {
 		
 	}
 
-	public override void OnGripDown(GameObject controller) {
+	public override void OnGripDown(WandController controller) {
 		
 	}
 
-	public override void OnGripUp(GameObject controller) {
+	public override void OnGripUp(WandController controller) {
 		
 	}
 
-	public override void OnGripHeld(GameObject controller) {
+	public override void OnGripHeld(WandController controller) {
 		
 	}
 
-	public override void OnTouchpadDown(GameObject controller) {
+	public override void OnTouchpadDown(WandController controller) {
 		
 	}
 
-	public override void OnTouchpadUp(GameObject controller) {
+	public override void OnTouchpadUp(WandController controller) {
 		
 	}
 
-	public override void OnTouchpadHeld(GameObject controller) {
+	public override void OnTouchpadHeld(WandController controller) {
 		
 	}
 
-	public override void OnMenuDown(GameObject controller) {
+	public override void OnMenuDown(WandController controller) {
 		
 	}
 
-	public override void OnMenuUp(GameObject controller) {
+	public override void OnMenuUp(WandController controller) {
 		
 	}
 
-	public override void OnMenuHeld(GameObject controller) {
+	public override void OnMenuHeld(WandController controller) {
 		
 	}
 }

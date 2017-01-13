@@ -14,9 +14,12 @@ public class WandController : MonoBehaviour {
 	public uint controllerNumber = 0;
 	public bool holdingItem = false;
 
+	WandController controllerScript;
+
 	void Awake() {
 		//Debug.Log ("Testing ControllerGrabItem Awake()");
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
+		controllerScript = gameObject.GetComponent<WandController> () as WandController;
 	}
 
 	void Start() {
@@ -34,7 +37,7 @@ public class WandController : MonoBehaviour {
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
 		//Debug.Log ("Still Touching an object");
-		if (!collidingObject) {
+		if (!collidingObject || !objectInHand) {
 			SetCollidingObject (other);
 		}
 	}
@@ -69,30 +72,30 @@ public class WandController : MonoBehaviour {
 			Item objectInHandScript = objectInHand.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				//Debug.Log ("Interacting with an item with grip down");
-				objectInHandScript.OnGripDown (gameObject);
+				objectInHandScript.OnGripDown (controllerScript);
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				//Debug.Log ("Interacting with an item with trigger down");
-				objectInHandScript.OnTriggerDown (gameObject);
+				objectInHandScript.OnTriggerDown (controllerScript);
 			}
 			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
 				//Debug.Log ("Interacting with an item with trigger held");
-				objectInHandScript.OnTriggerHeld (gameObject);
+				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
 		}
 		else if (collidingObject) {
 			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				//Debug.Log ("Interacting with an item with grip down");
-				objectInHandScript.OnGripDown (gameObject);
+				objectInHandScript.OnGripDown (controllerScript);
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				//Debug.Log ("Interacting with an item with trigger down");
-				objectInHandScript.OnTriggerDown (gameObject);
+				objectInHandScript.OnTriggerDown (controllerScript);
 			}
 			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
 				//Debug.Log ("Interacting with an item with trigger down");
-				objectInHandScript.OnTriggerHeld (gameObject);
+				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
 		}
 		else {
@@ -103,8 +106,8 @@ public class WandController : MonoBehaviour {
 		}
 	}
 
-	public void SetControllerVisible(GameObject controller, bool isVisible) {
-		foreach (SteamVR_RenderModel model in controller.GetComponentsInChildren<SteamVR_RenderModel>()) {
+	public void SetControllerVisible(bool isVisible) {
+		foreach (SteamVR_RenderModel model in gameObject.GetComponentsInChildren<SteamVR_RenderModel>()) {
 			foreach (var child in model.GetComponentsInChildren<MeshRenderer>()) {
 				child.enabled = isVisible;
 			}

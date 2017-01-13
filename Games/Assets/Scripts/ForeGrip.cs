@@ -9,7 +9,6 @@ public class ForeGrip : Item {
 	}
 
 	protected override void PickUp(GameObject controller) {
-		WandController controllerScipt = controller.GetComponent (typeof(WandController)) as WandController;
 		if (isHeld && controllerScipt.controllerNumber == controllerNumberHolding) {
 			Debug.Log ("Releasing Foregrip");
 			isHeld = false;
