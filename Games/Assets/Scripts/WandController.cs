@@ -8,7 +8,7 @@ public class WandController : MonoBehaviour {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
 
-	private GameObject collidingObject; // Object being touched by controller.
+	public GameObject collidingObject; // Object being touched by controller.
 	public GameObject objectInHand; // Object held by controller.
 
 	public uint controllerNumber = 0;
@@ -26,38 +26,45 @@ public class WandController : MonoBehaviour {
 		controllerNumber = controller.index;
 	}
 
+	void OnCollisionEnter(Collision col) {
+		Debug.Log (col.gameObject.name);
+	}
+
 	// Sets up other collider as potential grab target.
 	public void OnTriggerEnter(Collider other) {
 		//Debug.Log ("Touching an object: " + other.name);
-		if (!collidingObject) {
+		if (!collidingObject && !objectInHand) {
 			SetCollidingObject (other);
 		}
 	}
 
 	// Makes sure that the target is still set.
-	public void OnTriggerStay(Collider other) {
+	/*public void OnTriggerStay(Collider other) {
 		//Debug.Log ("Still Touching an object");
-		if (!collidingObject || !objectInHand) {
-			SetCollidingObject (other);
+		if (!collidingObject) {
+			//SetCollidingObject (other);
 		}
-	}
+	}*/
 
 	// Removes other as a potential grab target.
 	public void OnTriggerExit(Collider other) {
 		//Debug.Log ("Stopped Touching an object " + other.name);
 		if (!collidingObject) {
+			//Debug.Log ("I don't know when this OnTriggerExit should happen for the controllers");
 			return;
 		}
-		if (other.CompareTag ("Item")) {
-			Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
-			itemScript.Highlight (false);
-			collidingObject = null;
+		else if (other == collidingObject.GetComponent<Collider>()) {
+			if (other.transform.GetComponent (typeof(Item))) {
+				Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
+				itemScript.Highlight (false);
+				collidingObject = null;
+			}
 		}
 	}
 
 	private void SetCollidingObject(Collider col) {
 		//Debug.Log ("Setting colliding object: " + col.gameObject);
-		if (col.CompareTag ("Item")) {
+		if (col.transform.GetComponent (typeof(Item))) {
 			//Debug.Log ("testing collision");
 			Item itemScript = col.transform.GetComponent (typeof(Item)) as Item;
 			itemScript.Highlight (true);

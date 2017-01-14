@@ -23,11 +23,7 @@ public class PistolController  : Item {
 
 	public override void Highlight(bool highlight) {
 		if (highlight) {
-			if (!isHeld) {
-				gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = highlightMaterial;
-			} else {
-				gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = oldMaterial;
-			}
+			gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = highlightMaterial;
 		} else {
 			gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = oldMaterial;
 		}
