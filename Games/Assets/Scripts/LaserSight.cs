@@ -102,7 +102,7 @@ public class LaserSight : Attachment {
 	public override void OnHairTriggerHeld(WandController controller) {
 		
 	}
-
+	/*
 	public override void OnGripDown(WandController controller) {
 		if (!attachmentPoint) {
 			PickUp (controller);
@@ -116,7 +116,7 @@ public class LaserSight : Attachment {
 				Detach (controller);
 			}
 		}
-	}
+	}*/
 
 	public override void OnGripUp(WandController controller) {
 		

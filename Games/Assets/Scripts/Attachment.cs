@@ -134,4 +134,19 @@ public class Attachment : Item {
 			}
 		}
 	}
+
+	public override void OnGripDown(WandController controller) {
+		if (!attachmentPoint) {
+			PickUp (controller);
+		} else {
+			//Debug.Log ("Trying to attach");
+			if (!isAttached) {
+				//Debug.Log ("Attaching");
+				Attach (controller);
+			} else {
+				//Debug.Log ("Detaching");
+				Detach (controller);
+			}
+		}
+	}
 }
