@@ -50,6 +50,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Reload (Magazine magazineScript) {
 		//Debug.Log ("Loading Magazine");
+		gunShot[2].Play();
 		numBullets += magazineScript.numBullets;
 		magazineScript.isHeld = false;
 		if (magazineScript.gameObject.GetComponent<FixedJoint> ()) {
@@ -69,6 +70,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Unload(Magazine magazineScript) {
 		//Debug.Log ("Unloading Magazine");
+		gunShot[2].Play();
 		Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), magazineScript.GetComponent<Collider>(), false);
 		if (numBullets > 0) {
 			magazineScript.numBullets = numBullets - 1;
