@@ -89,6 +89,9 @@ public class WandController : MonoBehaviour {
 				//Debug.Log ("Interacting with an item with trigger held");
 				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
+				objectInHandScript.OnTouchpadDown (controllerScript);
+			}
 		}
 		else if (collidingObject) {
 			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;

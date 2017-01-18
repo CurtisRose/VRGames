@@ -10,8 +10,11 @@ public class Attachment : Item {
 
 	protected virtual void OnTriggerEnter(Collider col) {
 		if (col.GetComponent<AttachmentPoint>()) {
-			attachmentPoint = col.GetComponent<AttachmentPoint> ();
-			attachmentPoint.Highlight (true);
+			if (!col.GetComponent<AttachmentPoint> ().attachment) {
+				attachmentPoint = col.GetComponent<AttachmentPoint> ();
+				attachmentPoint.attachment = gameObject.GetComponent<Attachment>();
+				attachmentPoint.Highlight (true);
+			}
 		}
 	}
 	
@@ -19,6 +22,7 @@ public class Attachment : Item {
 		if (!isAttached && col.GetComponent<AttachmentPoint>()) {
 				if (col.GetComponent<AttachmentPoint> () == attachmentPoint) {
 					attachmentPoint.Highlight (false);
+				attachmentPoint.attachment = null;
 					attachmentPoint = null;
 				}
 		}

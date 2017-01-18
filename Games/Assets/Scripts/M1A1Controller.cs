@@ -8,6 +8,7 @@ public class M1A1Controller : Weapon {
 	public float bulletSpeed = 9000;
 	float time;
 	float rateOfFire = 0.15f;
+	private bool automatic = false;
 
 
 	void Start () {
@@ -45,7 +46,7 @@ public class M1A1Controller : Weapon {
 	}
 
 	public override void Reload (Magazine magazineScript) {
-		Debug.Log ("Loading Magazine");
+		//Debug.Log ("Loading Magazine");
 		numBullets += magazineScript.numBullets;
 		magazineScript.isHeld = false;
 		if (magazineScript.gameObject.GetComponent<FixedJoint> ()) {
@@ -64,7 +65,7 @@ public class M1A1Controller : Weapon {
 	}
 
 	public override void Unload(Magazine magazineScript) {
-		Debug.Log ("Unloading Magazine");
+		//Debug.Log ("Unloading Magazine");
 		Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), magazineScript.GetComponent<Collider>(), false);
 		if (numBullets > 0) {
 			magazineScript.numBullets = numBullets - 1;
@@ -143,6 +144,9 @@ public class M1A1Controller : Weapon {
 
 	public override void OnTriggerDown(WandController controller) {
 		//Debug.Log ("Trigger Pressed");
+		if (!automatic) {
+			Fire ();
+		}
 	}
 
 	public override void OnTriggerUp(WandController controller) {
@@ -152,7 +156,9 @@ public class M1A1Controller : Weapon {
 	public override void OnTriggerHeld(WandController controller) {
 		//Debug.Log ("Trigger Held");
 		if (controller.objectInHand == gameObject) { // If the hand that is holding the gun presses trigger, then shoot.
-			AutomaticFire();
+			if (automatic) {
+				AutomaticFire ();
+			} 
 		}
 	}
 
@@ -183,6 +189,11 @@ public class M1A1Controller : Weapon {
 
 	public override void OnTouchpadDown(WandController controller) {
 		//Debug.Log ("Touchpad Pressed");
+		if (automatic) {
+			automatic = false;
+		} else {
+			automatic = true;
+		}
 	}
 
 	public override void OnTouchpadUp(WandController controller) {

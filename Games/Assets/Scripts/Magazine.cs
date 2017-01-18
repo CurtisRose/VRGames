@@ -31,6 +31,7 @@ public class Magazine : Item {
 					//Debug.Log ("Testing magazine collision exit");
 					attached = false;
 					transform.parent = null;
+					attachedWeapon = null;
 					//Unattach (col.gameObject.GetComponentInChildren<Weapon> ());
 				}
 			}
@@ -40,11 +41,12 @@ public class Magazine : Item {
 	void Attach(Weapon weapon) {
 		weapon.Reload (gameObject.GetComponent<Magazine>());
 		attachedWeapon = weapon;
+
 	}
 
 	void Unattach(Weapon weapon) {
 		weapon.Unload (gameObject.GetComponent<Magazine>());
-		attachedWeapon = null;
+		//attachedWeapon = null;
 	}
 
 	public override void OnGripDown(WandController controller) {

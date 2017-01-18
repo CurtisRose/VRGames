@@ -9,7 +9,7 @@ public class AttachmentPoint : MonoBehaviour {
 	private Material oldMaterial;
 
 	public string attachmentPointType = null;
-	public Attachment toAttach = null;
+	public Attachment attachment = null;
 
 	void Start() {
 		oldMaterial = gameObject.GetComponent<Renderer> ().material;
