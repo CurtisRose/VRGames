@@ -65,7 +65,7 @@ public class PistolController  : Item {
 				Quaternion newRotation = Quaternion.Euler (-80, 180, 0);
 				gameObject.transform.rotation = controller.transform.rotation * newRotation;
 				Vector3 newPosition = new Vector3 (0.0f, 0.0f, -0.1f);
-				gameObject.transform.localPosition = newPosition;
+				gameObject.transform.position = newPosition;
 				FixedJoint joint = AddFixedJoint();
 				joint.connectedBody = controller.GetComponent<Rigidbody> ();
 				gameObject.transform.parent = null;

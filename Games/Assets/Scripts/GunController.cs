@@ -165,7 +165,6 @@ public class GunController : Item {
 				controller.objectInHand = gameObject;
 
 				if (gameObject.GetComponent<FixedJoint> ()) {
-					//otherControllerScript.holdingItem = false;
 					WandController oldController = gameObject.GetComponent<FixedJoint> ().connectedBody.gameObject.GetComponent<WandController>() as WandController;
 					oldController.SetControllerVisible (true);
 					oldController.holdingItem = false;

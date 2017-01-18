@@ -11,26 +11,11 @@ public class Target : MonoBehaviour {
 		gameObject.transform.GetChild(0).GetComponent<Renderer>().material = targetUnhitRed;
 	}
 
-	void OnCollisionEnter (Collision col) {
-		//Debug.Log (col.gameObject.name);
-		if (col.gameObject.name == "Bullet(Clone)") {
-			//Debug.Log ("Bullet hit target");
-			//Debug.Log("\n\n===============================");
-			//Debug.Log(gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name + " == " +  targetUnhitRed.name + " (Instance)" + " == " + targetHitGreen.name);
-			col.gameObject.GetComponent<Rigidbody> ().useGravity = true;
-			if (gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhitRed.name + " (Instance)")) {
-				col.gameObject.GetComponent<Renderer> ().material = targetHitGreen;
-				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetHitGreen;
-			} else {
-				col.gameObject.GetComponent<Renderer> ().material = targetUnhitRed;
-				gameObject.transform.GetChild (0).GetComponent<Renderer> ().material = targetUnhitRed;
-			}
-			//Debug.Log(gameObject.transform.GetChild (0).GetComponent<Renderer> ().material.name + " == " +  targetUnhitRed.name + " (Instance)" + " == " + targetHitGreen.name + " (Instance)");
+	void OnCollisionEnter () {
+		if (transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhitRed.name + " (Instance)")) {
+			transform.GetChild (0).GetComponent<Renderer> ().material = targetHitGreen;
+		} else {
+			transform.GetChild (0).GetComponent<Renderer> ().material = targetUnhitRed;
 		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
