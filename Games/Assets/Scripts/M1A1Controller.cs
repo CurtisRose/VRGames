@@ -9,6 +9,7 @@ public class M1A1Controller : Weapon {
 	float time;
 	float rateOfFire = 0.15f;
 	private bool automatic = false;
+	public AudioSource[] gunShot;
 
 
 	void Start () {
@@ -18,6 +19,7 @@ public class M1A1Controller : Weapon {
 		gripPosition = new Vector3 (0.0f, -0.17f, 0.01f);
 		magazineRotation = Quaternion.Euler (-90, 0, 0);
 		magazinePosition = new Vector3 (0f, -0.04166641f, 0.1096273f);
+		gunShot = GetComponents<AudioSource>();
 
 	}
 
@@ -27,6 +29,7 @@ public class M1A1Controller : Weapon {
 
 	void Fire() {
 		if (numBullets > 0) {
+			gunShot [numBullets%2].Play ();
 			numBullets -= 1;
 			GameObject bullet = Instantiate (
 				                    bulletPrefab,
