@@ -41,6 +41,7 @@ public class Magazine : Item {
 	void Attach(Weapon weapon) {
 		weapon.Reload (gameObject.GetComponent<Magazine>());
 		attachedWeapon = weapon;
+		holdingController = null;
 
 	}
 
