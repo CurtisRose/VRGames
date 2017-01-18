@@ -9,7 +9,7 @@ public class SniperScope : Attachment {
 		isAttached = false;
 		attachmentType = "Optics";
 
-		//oldMaterial = gameObject.transform.GetChild(0).GetComponent<Renderer> ().material;
+		oldMaterial = gameObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer> ().material;
 	}
 
 	protected override void Attach(WandController controller) {
@@ -44,9 +44,9 @@ public class SniperScope : Attachment {
 	public override void Highlight(bool highlight) {
 		//Debug.Log ("Highlighting Laser");
 		if (highlight) {
-			//gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = highlightMaterial;
+			gameObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer> ().material = highlightMaterial;
 		} else {
-			//gameObject.transform.GetChild(0).GetComponent<Renderer> ().material = oldMaterial;
+			gameObject.transform.GetChild(0).GetChild(0).GetComponent<Renderer> ().material = oldMaterial;
 		}
 	}
 }

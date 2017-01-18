@@ -36,6 +36,7 @@ public class LaserSight : Attachment {
 		}
 		transform.GetChild(1).gameObject.SetActive (true);
 	}
+
 	private void ShowLaserInfinite() {
 		//Debug.Log (transform.forward);
 		transform.GetChild(1).gameObject.SetActive (false);

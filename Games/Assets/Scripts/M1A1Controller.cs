@@ -9,27 +9,23 @@ public class M1A1Controller : Weapon {
 	float time;
 	float rateOfFire = 0.15f;
 	private bool automatic = false;
-	public AudioSource[] gunShot;
+	public AudioSource[] gunSounds;
 
 
 	void Start () {
 		time = Time.realtimeSinceStartup;
-		oldMaterial = gameObject.transform.GetChild(1).GetComponent<Renderer> ().material;
+		oldMaterial = transform.GetChild(0).GetComponent<Renderer> ().material;
 		gripRotation = Quaternion.Euler (-65, 180, 0);
 		gripPosition = new Vector3 (0.0f, -0.17f, 0.01f);
 		magazineRotation = Quaternion.Euler (-90, 0, 0);
 		magazinePosition = new Vector3 (0f, -0.04166641f, 0.1096273f);
-		gunShot = GetComponents<AudioSource>();
+		gunSounds = GetComponents<AudioSource>();
 
 	}
-
-	void OnCollisionEnter(Collision col) {
 		
-	}
-
 	void Fire() {
 		if (numBullets > 0) {
-			gunShot [numBullets%2].Play ();
+			gunSounds [numBullets % 2].Play ();
 			numBullets -= 1;
 			GameObject bullet = Instantiate (
 				                    bulletPrefab,
@@ -38,6 +34,8 @@ public class M1A1Controller : Weapon {
 			Physics.IgnoreCollision (bullet.GetComponent<Collider> (), gameObject.GetComponent<Collider> ());
 			bullet.GetComponent<Rigidbody> ().AddForce (bullet.transform.forward * bulletSpeed);
 			Destroy (bullet, 8.0f);
+		} else {
+			gunSounds [3].Play ();
 		}
 	}
 
@@ -50,7 +48,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Reload (Magazine magazineScript) {
 		//Debug.Log ("Loading Magazine");
-		gunShot[2].Play();
+		gunSounds[2].Play();
 		numBullets += magazineScript.numBullets;
 		magazineScript.isHeld = false;
 		if (magazineScript.gameObject.GetComponent<FixedJoint> ()) {
@@ -70,7 +68,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Unload(Magazine magazineScript) {
 		//Debug.Log ("Unloading Magazine");
-		gunShot[2].Play();
+		gunSounds[2].Play();
 		Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), magazineScript.GetComponent<Collider>(), false);
 		if (numBullets > 0) {
 			magazineScript.numBullets = numBullets - 1;
@@ -82,10 +80,11 @@ public class M1A1Controller : Weapon {
 	}
 
 	public override void Highlight(bool highlight) {
+		//Debug.Log ("Highlighting m1a4");
 		if (highlight) {
-			gameObject.GetComponent<Renderer> ().material = highlightMaterial;
+			transform.GetChild(0).GetComponent<Renderer> ().material = highlightMaterial;
 		} else {
-			gameObject.GetComponent<Renderer> ().material = oldMaterial;
+			transform.GetChild(0).GetComponent<Renderer> ().material = oldMaterial;
 		}
 	}
 
@@ -149,7 +148,7 @@ public class M1A1Controller : Weapon {
 
 	public override void OnTriggerDown(WandController controller) {
 		//Debug.Log ("Trigger Pressed");
-		if (!automatic) {
+		if (!automatic && controller.objectInHand == gameObject) {
 			Fire ();
 		}
 	}
@@ -194,10 +193,13 @@ public class M1A1Controller : Weapon {
 
 	public override void OnTouchpadDown(WandController controller) {
 		//Debug.Log ("Touchpad Pressed");
-		if (automatic) {
-			automatic = false;
-		} else {
-			automatic = true;
+		if (controller.objectInHand == gameObject) {
+			gunSounds [3].Play ();
+			if (automatic) {
+				automatic = false;
+			} else {
+				automatic = true;
+			}
 		}
 	}
 

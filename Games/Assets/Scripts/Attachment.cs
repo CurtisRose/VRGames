@@ -11,9 +11,11 @@ public class Attachment : Item {
 	protected virtual void OnTriggerEnter(Collider col) {
 		if (col.GetComponent<AttachmentPoint>()) {
 			if (!col.GetComponent<AttachmentPoint> ().attachment) {
-				attachmentPoint = col.GetComponent<AttachmentPoint> ();
-				attachmentPoint.attachment = gameObject.GetComponent<Attachment>();
-				attachmentPoint.Highlight (true);
+				if (attachmentType == col.GetComponent<AttachmentPoint> ().attachmentPointType) {
+					attachmentPoint = col.GetComponent<AttachmentPoint> ();
+					attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
+					attachmentPoint.Highlight (true);
+				}
 			}
 		}
 	}
@@ -22,7 +24,7 @@ public class Attachment : Item {
 		if (!isAttached && col.GetComponent<AttachmentPoint>()) {
 				if (col.GetComponent<AttachmentPoint> () == attachmentPoint) {
 					attachmentPoint.Highlight (false);
-				attachmentPoint.attachment = null;
+					attachmentPoint.attachment = null;
 					attachmentPoint = null;
 				}
 		}
@@ -51,6 +53,7 @@ public class Attachment : Item {
 		isAttached = true;
 		attachmentPoint.Highlight (false);
 		GetComponent<Collider> ().isTrigger = false;
+		controllerNumberHolding = 0;
 		
 		if (gameObject.GetComponent<FixedJoint> ()) {
 			controller.objectInHand = null;
@@ -74,6 +77,7 @@ public class Attachment : Item {
 			gameObject.GetComponent<FixedJoint> ().connectedBody = null;
 			Destroy (gameObject.GetComponent<FixedJoint> ());
 		}
+		gameObject.transform.parent = null;
 		Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> (), false);
 		PickUp (controller);
 	}
