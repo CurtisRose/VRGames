@@ -39,12 +39,12 @@ public class WandController : MonoBehaviour {
 	}
 
 	// Makes sure that the target is still set.
-	/*public void OnTriggerStay(Collider other) {
+	public void OnTriggerStay(Collider other) {
 		//Debug.Log ("Still Touching an object");
 		if (!collidingObject) {
-			//SetCollidingObject (other);
+			SetCollidingObject (other);
 		}
-	}*/
+	}
 
 	// Removes other as a potential grab target.
 	public void OnTriggerExit(Collider other) {
@@ -109,7 +109,7 @@ public class WandController : MonoBehaviour {
 			}
 		}
 		else {
-
+			
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
 			Debug.Log ("Controller: " + controllerNumber);
