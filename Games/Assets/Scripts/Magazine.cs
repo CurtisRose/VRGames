@@ -50,23 +50,40 @@ public class Magazine : Item {
 
 	void Unattach(Weapon weapon) {
 		weapon.Unload (gameObject.GetComponent<Magazine>());
-		if (numBullets == 3) {
+
+		if (numBullets == 5) {
+			if (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
+				Debug.Log ("Destroying 6th bullet");
+				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
+			}
+		}
+		else if (numBullets == 4) {
+			if (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
+				Debug.Log ("Destroying 5th bullet");
+				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
+			}
+		}
+		else if (numBullets == 3) {
 			if (transform.GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
+				Debug.Log ("Destroying 4th bullet");
 				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
 			}
 		}
 		else if (numBullets == 2) {
 			if (transform.GetChild (0).GetChild (0).childCount > 0) {
+				Debug.Log ("Destroying 3rd bullet");
 				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).gameObject);
 			}
 		} 
 		else if (numBullets == 1) {
 			if (transform.GetChild (0).childCount > 0) {
+				Debug.Log ("Destroying 2nd bullet");
 				Destroy (transform.GetChild (0).GetChild (0).gameObject);
 			}
 		} 
 		else if (numBullets == 0) {
 			if (transform.childCount > 0) {
+				Debug.Log ("Destroying 1st bullet");
 				Destroy (transform.GetChild (0).gameObject);
 			}
 		} 

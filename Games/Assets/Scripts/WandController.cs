@@ -131,6 +131,10 @@ public class WandController : MonoBehaviour {
 	public Vector3 getAngularVelocity() {
 		return controller.angularVelocity;
 	}
+
+	public void VibrateController(int time) {
+		controller.TriggerHapticPulse ((ushort)time);
+	}
 }
 
 

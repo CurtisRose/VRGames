@@ -31,7 +31,7 @@ public class SniperScope : Attachment {
 		transform.position = attachmentPoint.transform.position;
 		Vector3 temp = transform.localPosition;
 		// Needs to be fixed. 3 should not be hard coded. Couldn't figure it out.
-		temp.x += 3;
+		temp.x += 4;
 		transform.localPosition = temp;
 		transform.parent = null;
 		FixedJoint joint = AddFixedJoint();

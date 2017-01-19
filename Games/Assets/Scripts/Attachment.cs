@@ -13,7 +13,7 @@ public class Attachment : Item {
 			if (!col.GetComponent<AttachmentPoint> ().attachment) {
 				if (attachmentType == col.GetComponent<AttachmentPoint> ().attachmentPointType) {
 					attachmentPoint = col.GetComponent<AttachmentPoint> ();
-					attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
+					//attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
 					attachmentPoint.Highlight (true);
 				}
 			}
@@ -54,6 +54,7 @@ public class Attachment : Item {
 		attachmentPoint.Highlight (false);
 		GetComponent<Collider> ().isTrigger = false;
 		controllerNumberHolding = 0;
+		attachmentPoint.attachment = GetComponent<Attachment>();
 		
 		if (gameObject.GetComponent<FixedJoint> ()) {
 			controller.objectInHand = null;
@@ -73,6 +74,7 @@ public class Attachment : Item {
 	protected virtual void Detach(WandController controller) {
 		//Debug.Log ("Testing Detach Attachment");
 		isAttached = false;
+		attachmentPoint.attachment = null;
 		if (gameObject.GetComponent<FixedJoint> ()) {
 			gameObject.GetComponent<FixedJoint> ().connectedBody = null;
 			Destroy (gameObject.GetComponent<FixedJoint> ());

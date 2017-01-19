@@ -23,8 +23,10 @@ public class M1A1Controller : Weapon {
 		hasMagazine = false;
 	}
 		
-	void Fire() {
+	void Fire(WandController controller) {
 		if (numBullets > 0) {
+			transform.GetComponent<Rigidbody> ().AddTorque (0, 500, 0);
+			controller.VibrateController (3999);
 			gunSounds [numBullets % 2].Play ();
 			numBullets -= 1;
 			GameObject bullet = Instantiate (
@@ -39,10 +41,10 @@ public class M1A1Controller : Weapon {
 		}
 	}
 
-	void AutomaticFire() {
+	void AutomaticFire(WandController controller) {
 		if (Time.realtimeSinceStartup - time > rateOfFire) {
 			time = Time.realtimeSinceStartup;
-			Fire ();
+			Fire (controller);
 		}
 	}
 
@@ -100,13 +102,8 @@ public class M1A1Controller : Weapon {
 		joint.angularXMotion = ConfigurableJointMotion.Limited;
 		joint.angularYMotion = ConfigurableJointMotion.Limited;
 		joint.angularZMotion = ConfigurableJointMotion.Limited;
-		SoftJointLimitSpring temp = new SoftJointLimitSpring ();
-		temp.damper = 500;
-		temp.spring = 500;
-		joint.angularXLimitSpring = temp;
-		joint.angularYZLimitSpring= temp;
-		joint.targetPosition = controller.transform.position;
-		joint.targetRotation = controller.transform.rotation;
+		//joint.targetPosition = controller.transform.position;
+		//joint.targetRotation = controller.transform.rotation;
 		return joint;
 	}
 
@@ -169,7 +166,7 @@ public class M1A1Controller : Weapon {
 	public override void OnTriggerDown(WandController controller) {
 		//Debug.Log ("Trigger Pressed");
 		if (!automatic && controller.objectInHand == gameObject) {
-			Fire ();
+			Fire (controller);
 		}
 	}
 
@@ -181,7 +178,7 @@ public class M1A1Controller : Weapon {
 		//Debug.Log ("Trigger Held");
 		if (controller.objectInHand == gameObject) { // If the hand that is holding the gun presses trigger, then shoot.
 			if (automatic) {
-				AutomaticFire ();
+				AutomaticFire (controller);
 			} 
 		}
 	}
