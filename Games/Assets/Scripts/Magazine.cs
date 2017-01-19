@@ -16,9 +16,11 @@ public class Magazine : Item {
 		if (col.gameObject.GetComponentInChildren<Weapon>()) {
 			if (isHeld) {
 				if (!attached) {
-					//Debug.Log ("Testing magazine collision enter");
-					attached = true;
-					Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+					if (!col.gameObject.GetComponentInChildren<Weapon> ().hasMagazine) {
+						//Debug.Log ("Testing magazine collision enter");
+						attached = true;
+						Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+					}
 				}
 			}
 		}
@@ -48,6 +50,26 @@ public class Magazine : Item {
 
 	void Unattach(Weapon weapon) {
 		weapon.Unload (gameObject.GetComponent<Magazine>());
+		if (numBullets == 3) {
+			if (transform.GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
+				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
+			}
+		}
+		else if (numBullets == 2) {
+			if (transform.GetChild (0).GetChild (0).childCount > 0) {
+				Destroy (transform.GetChild (0).GetChild (0).GetChild (0).gameObject);
+			}
+		} 
+		else if (numBullets == 1) {
+			if (transform.GetChild (0).childCount > 0) {
+				Destroy (transform.GetChild (0).GetChild (0).gameObject);
+			}
+		} 
+		else if (numBullets == 0) {
+			if (transform.childCount > 0) {
+				Destroy (transform.GetChild (0).gameObject);
+			}
+		} 
 		//attachedWeapon = null;
 	}
 

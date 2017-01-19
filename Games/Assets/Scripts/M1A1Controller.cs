@@ -20,7 +20,7 @@ public class M1A1Controller : Weapon {
 		magazineRotation = Quaternion.Euler (-90, 0, 0);
 		magazinePosition = new Vector3 (0f, -0.04166641f, 0.1096273f);
 		gunSounds = GetComponents<AudioSource>();
-
+		hasMagazine = false;
 	}
 		
 	void Fire() {
@@ -48,6 +48,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Reload (Magazine magazineScript) {
 		//Debug.Log ("Loading Magazine");
+		hasMagazine = true;
 		gunSounds[2].Play();
 		numBullets += magazineScript.numBullets;
 		magazineScript.isHeld = false;
@@ -68,6 +69,7 @@ public class M1A1Controller : Weapon {
 
 	public override void Unload(Magazine magazineScript) {
 		//Debug.Log ("Unloading Magazine");
+		hasMagazine = false;
 		gunSounds[2].Play();
 		Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), magazineScript.GetComponent<Collider>(), false);
 		if (numBullets > 0) {
@@ -88,6 +90,26 @@ public class M1A1Controller : Weapon {
 		}
 	}
 
+	public virtual ConfigurableJoint AddConfigurableJoint(WandController controller) {
+		ConfigurableJoint joint = gameObject.AddComponent<ConfigurableJoint> ();
+		joint.connectedBody = controller.transform.GetComponent<Rigidbody>();
+		joint.anchor = controller.transform.position;
+		joint.xMotion = ConfigurableJointMotion.Locked;
+		joint.yMotion = ConfigurableJointMotion.Locked;
+		joint.zMotion = ConfigurableJointMotion.Locked;
+		joint.angularXMotion = ConfigurableJointMotion.Limited;
+		joint.angularYMotion = ConfigurableJointMotion.Limited;
+		joint.angularZMotion = ConfigurableJointMotion.Limited;
+		SoftJointLimitSpring temp = new SoftJointLimitSpring ();
+		temp.damper = 500;
+		temp.spring = 500;
+		joint.angularXLimitSpring = temp;
+		joint.angularYZLimitSpring= temp;
+		joint.targetPosition = controller.transform.position;
+		joint.targetRotation = controller.transform.rotation;
+		return joint;
+	}
+
 	protected override void PickUp(WandController controller) {
 		if (isHeld) {
 			if (controller.controllerNumber == controllerNumberHolding) {
@@ -97,9 +119,9 @@ public class M1A1Controller : Weapon {
 				controller.objectInHand = null;
 				controllerNumberHolding = 0;
 				controller.SetControllerVisible (true);
-				if (GetComponent<FixedJoint> ()) {
-					GetComponent<FixedJoint> ().connectedBody = null;
-					Destroy (GetComponent<FixedJoint> ());
+				if (GetComponent<ConfigurableJoint> ()) {
+					GetComponent<ConfigurableJoint> ().connectedBody = null;
+					Destroy (GetComponent<ConfigurableJoint> ());
 				}
 				gameObject.GetComponent<Rigidbody> ().velocity = controller.getVelocity ();
 				gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getVelocity ();
@@ -109,21 +131,20 @@ public class M1A1Controller : Weapon {
 				controllerNumberHolding = controller.controllerNumber;
 				controller.objectInHand = gameObject;
 
-				if (gameObject.GetComponent<FixedJoint> ()) {
-					WandController oldController = gameObject.GetComponent<FixedJoint> ().connectedBody.gameObject.GetComponent<WandController>() as WandController;
+				if (gameObject.GetComponent<ConfigurableJoint> ()) {
+					WandController oldController = gameObject.GetComponent<ConfigurableJoint> ().connectedBody.gameObject.GetComponent<WandController>() as WandController;
 					oldController.SetControllerVisible (true);
 					oldController.holdingItem = false;
 					oldController.objectInHand = null;
-					gameObject.GetComponent<FixedJoint> ().connectedBody = null;
-					Destroy (gameObject.GetComponent<FixedJoint> ());
+					gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
+					Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 				}
 
 				controller.SetControllerVisible (false);
 				gameObject.transform.parent = controller.transform;
 				gameObject.transform.rotation = controller.transform.rotation * gripRotation;
 				gameObject.transform.localPosition = gripPosition;
-				FixedJoint joint = AddFixedJoint();
-				joint.connectedBody = controller.GetComponent<Rigidbody> ();
+				AddConfigurableJoint(controller);
 				gameObject.transform.parent = null;
 				Highlight (false);
 			}
@@ -138,8 +159,7 @@ public class M1A1Controller : Weapon {
 				gameObject.transform.parent = controller.transform;
 				gameObject.transform.rotation = controller.transform.rotation * gripRotation;
 				gameObject.transform.localPosition = gripPosition;
-				FixedJoint joint = AddFixedJoint();
-				joint.connectedBody = controller.GetComponent<Rigidbody> ();
+				AddConfigurableJoint(controller);
 				gameObject.transform.parent = null;
 				Highlight (false);
 			}

@@ -8,6 +8,7 @@ public class Weapon : Item {
 	protected Vector3 gripPosition;
 	protected Quaternion magazineRotation;
 	protected Vector3 magazinePosition;
+	public bool hasMagazine = false;
 
 	// Use this for initialization
 	void Start () {
@@ -25,5 +26,11 @@ public class Weapon : Item {
 
 	public virtual void Unload(Magazine magazineScript) {
 
+	}
+
+	public virtual ConfigurableJoint AddConfigurableJoint() {
+		ConfigurableJoint joint = gameObject.AddComponent<ConfigurableJoint> ();
+
+		return joint;
 	}
 }
