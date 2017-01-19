@@ -21,7 +21,21 @@ public class Attachment : Item {
 			}
 		}
 	}
-	
+
+	protected virtual void OnTriggerStay(Collider col) {
+		if (col.GetComponent<AttachmentPoint>()) {
+			if (!col.GetComponent<AttachmentPoint> ().attachment) {
+				if (attachmentType == col.GetComponent<AttachmentPoint> ().attachmentPointType) {
+					if (!attachmentPoint) {
+						attachmentPoint = col.GetComponent<AttachmentPoint> ();
+						//attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
+						attachmentPoint.Highlight (true);
+					}
+				}
+			}
+		}
+	}
+
 	protected virtual void OnTriggerExit(Collider col) {
 		if (!isAttached && col.GetComponent<AttachmentPoint>()) {
 				if (col.GetComponent<AttachmentPoint> () == attachmentPoint) {
