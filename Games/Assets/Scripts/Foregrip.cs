@@ -14,9 +14,11 @@ public class Foregrip : Attachment {
 		if (col.GetComponent<AttachmentPoint>()) {
 			if (!col.GetComponent<AttachmentPoint> ().attachment) {
 				if (attachmentType == col.GetComponent<AttachmentPoint> ().attachmentPointType) {
-					attachmentPoint = col.GetComponent<AttachmentPoint> ();
-					attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
-					attachmentPoint.Highlight (true);
+					if (!attachmentPoint) {
+						attachmentPoint = col.GetComponent<AttachmentPoint> ();
+						attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
+						attachmentPoint.Highlight (true);
+					}
 				}
 			}
 		} else if (col.GetComponent<WandController>() && isAttached) {
