@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PistolController  : Item {
+public class PistolController  : Weapon {
 	public GameObject bulletPrefab;
 	public Transform bulletSpawn;
 	public float bulletSpeed = 1000;
 
-	void Start () {
-		oldMaterial = gameObject.transform.GetChild(1).GetComponent<Renderer> ().material;
+	protected override void Start () {
+		highlightObject = transform.GetChild (1).gameObject;
+		base.Start ();
 	}
 
 	void Fire() {
@@ -31,11 +32,10 @@ public class PistolController  : Item {
 
 	protected override void PickUp(WandController controller) {
 		if (isHeld) {
-			if (controller.controllerNumber == controllerNumberHolding) {
+			if (controller.GetControllerNumber() == controllerNumberHolding) {
 				//Debug.Log ("Dropping Gun");
 				isHeld = false;
-				controller.holdingItem = false;
-				controller.objectInHand = null;
+				controller.DropItem ();
 				controllerNumberHolding = 0;
 				controller.SetControllerVisible (true);
 				if (GetComponent<FixedJoint> ()) {
@@ -46,16 +46,14 @@ public class PistolController  : Item {
 				gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getVelocity ();
 			} else {
 				//Debug.Log ("Gun Swapping Hands");
-				controller.holdingItem = true;
-				controllerNumberHolding = controller.controllerNumber;
-				controller.objectInHand = gameObject;
+				controller.PickUpItem(gameObject);
+				controllerNumberHolding = controller.GetControllerNumber();
 
 				if (gameObject.GetComponent<FixedJoint> ()) {
 					//otherControllerScript.holdingItem = false;
 					WandController oldController = gameObject.GetComponent<FixedJoint> ().connectedBody.gameObject.GetComponent<WandController>() as WandController;
 					oldController.SetControllerVisible (true);
-					oldController.holdingItem = false;
-					oldController.objectInHand = null;
+					oldController.DropItem ();
 					gameObject.GetComponent<FixedJoint> ().connectedBody = null;
 					Destroy (gameObject.GetComponent<FixedJoint> ());
 				}
@@ -73,11 +71,10 @@ public class PistolController  : Item {
 			}
 			//Highlight ();
 		} else if (!isHeld) {
-			if (!controller.holdingItem) {
+			if (!controller.GetHoldingItem()) {
 				isHeld = true;
-				controller.holdingItem = true;
-				controllerNumberHolding = controller.controllerNumber;
-				controller.objectInHand = gameObject;
+				controller.PickUpItem (gameObject);
+				controllerNumberHolding = controller.GetControllerNumber();
 				controller.SetControllerVisible (false);
 				gameObject.transform.parent = controller.transform;
 				Quaternion newRotation = Quaternion.Euler (-80, 180, 0);
@@ -94,65 +91,8 @@ public class PistolController  : Item {
 
 	public override void OnTriggerDown(WandController controller) {
 		//Debug.Log ("Trigger Pressed");
-		if (controller.objectInHand == gameObject) { // If the hand that is holding the gun presses trigger, then shoot.
+		if (controller.GetObjectInHand() == gameObject) { // If the hand that is holding the gun presses trigger, then shoot.
 			Fire();
 		}
-	}
-
-	public override void OnTriggerUp(WandController controller) {
-		//Debug.Log ("Trigger Released");
-	}
-
-	public override void OnTriggerHeld(WandController controller) {
-		//Debug.Log ("Trigger Held");
-	}
-
-	public override void OnHairTriggerDown(WandController controller) {
-		//Debug.Log ("Hair Trigger Pressed");
-	}
-
-	public override void OnHairTriggerUp(WandController controller) {
-		//Debug.Log ("Hair Trigger Released");
-	}
-
-	public override void OnHairTriggerHeld(WandController controller) {
-		//Debug.Log ("Hair Trigger Held");
-	}
-
-	public override void OnGripDown(WandController controller) {
-		//Debug.Log ("Grip Pressed");
-		PickUp(controller);
-	}
-
-	public override void OnGripUp(WandController controller) {
-		//Debug.Log ("Grip Released");
-	}
-
-	public override void OnGripHeld(WandController controller) {
-		//Debug.Log ("Grip Held");
-	}
-
-	public override void OnTouchpadDown(WandController controller) {
-		//Debug.Log ("Touchpad Pressed");
-	}
-
-	public override void OnTouchpadUp(WandController controller) {
-		//Debug.Log ("Touchpad Released");
-	}
-
-	public override void OnTouchpadHeld(WandController controller) {
-		//Debug.Log ("Touchpad Held");
-	}
-
-	public override void OnMenuDown(WandController controller) {
-		//Debug.Log ("Menu Pressed");
-	}
-
-	public override void OnMenuUp(WandController controller) {
-		//Debug.Log ("Menu Released");
-	}
-
-	public override void OnMenuHeld(WandController controller) {
-		//Debug.Log ("Menu Held");
 	}
 }

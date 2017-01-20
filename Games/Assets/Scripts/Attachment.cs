@@ -3,10 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Attachment : Item {
-	public bool isAttachment = false;
-	public bool isAttached = false;
-	public string attachmentType = null;
-	public AttachmentPoint attachmentPoint;
+	protected bool isAttachment;
+	protected bool isAttached;
+	protected string attachmentType;
+	protected AttachmentPoint attachmentPoint;
+	protected Vector3 attachmentPosition;
+
+	protected override void Start() {
+		base.Start ();
+		isAttachment = true;
+		isAttached = false;
+		attachmentType = null;
+		attachmentPoint = null;
+		attachmentPosition = Vector3.zero;
+	}
 
 	protected virtual void OnTriggerEnter(Collider col) {
 		if (col.GetComponent<AttachmentPoint>()) {
@@ -45,26 +55,9 @@ public class Attachment : Item {
 				}
 		}
 	}
-
-	/*protected virtual void OnCollisionStay(Collision col) {
-
-	}*/
-
-	/*protected virtual void OnCollisionExit(Collision col) {
-		if (col.gameObject.GetComponentInChildren<AttachmentPoint> ()) {
-			//AttachmentPoint atachmentPoint = col.gameObject.GetComponent<AttachmentPoint> () as AttachmentPoint;
-			if (!isAttached) {
-				if (attachmentPoint) {
-					attachmentPoint.Highlight (false);
-					attachmentPoint = null;
-				}
-			}
-		}
-	}*/
 		
 	protected virtual void Attach(WandController controller) {
-		controller.objectInHand = null;
-		controller.holdingItem = false;
+		controller.DropItem ();
 		isHeld = false;
 		isAttached = true;
 		attachmentPoint.Highlight (false);
@@ -72,15 +65,18 @@ public class Attachment : Item {
 		controllerNumberHolding = 0;
 		attachmentPoint.attachment = GetComponent<Attachment>();
 		
-		if (gameObject.GetComponent<FixedJoint> ()) {
-			controller.objectInHand = null;
+		if (gameObject.GetComponent<ConfigurableJoint> ()) {
+			controller.SetObjectInHand(null);
 			controller.SetControllerVisible (true);
-			gameObject.GetComponent<FixedJoint> ().connectedBody = null;
-			Destroy (gameObject.GetComponent<FixedJoint> ());
+			gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
+			Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 		}
-		transform.position = attachmentPoint.transform.position;
 		transform.rotation = attachmentPoint.transform.rotation;
-		FixedJoint joint = AddFixedJoint();
+		transform.parent = attachmentPoint.transform;
+		transform.position = attachmentPoint.transform.position;
+		transform.localPosition = transform.localPosition + attachmentPosition;
+		transform.parent = null;
+		ConfigurableJoint joint = AddConfigurableJoint(controller);
 		joint.connectedBody = attachmentPoint.transform.parent.GetComponent<Rigidbody> ();
 		joint.anchor = attachmentPoint.transform.position;
 		Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> ());
@@ -91,9 +87,9 @@ public class Attachment : Item {
 		//Debug.Log ("Testing Detach Attachment");
 		isAttached = false;
 		attachmentPoint.attachment = null;
-		if (gameObject.GetComponent<FixedJoint> ()) {
-			gameObject.GetComponent<FixedJoint> ().connectedBody = null;
-			Destroy (gameObject.GetComponent<FixedJoint> ());
+		if (gameObject.GetComponent<ConfigurableJoint> ()) {
+			gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
+			Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 		}
 		gameObject.transform.parent = null;
 		Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> (), false);
@@ -101,62 +97,46 @@ public class Attachment : Item {
 	}
 
 	protected override void PickUp(WandController controller) {
-		if (isHeld  && controller.controllerNumber == controllerNumberHolding) {
-			//Debug.Log ("Dropping Item");
+		if (isHeld  && controller.GetControllerNumber() == controllerNumberHolding) {
 			isHeld = false;
 			GetComponent<Collider>().isTrigger = false;
-			controller.holdingItem = false;
+			controller.DropItem ();
 			controllerNumberHolding = 0;
-			controller.objectInHand = null;
 
-			//controllerScipt.SetControllerVisible (controller, true);
-
-			if (gameObject.GetComponent<FixedJoint> ()) {
-				gameObject.GetComponent<FixedJoint> ().connectedBody = null;
-				Destroy (gameObject.GetComponent<FixedJoint> ());
+			if (gameObject.GetComponent<ConfigurableJoint> ()) {
+				gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
+				Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 			}
 
 			gameObject.GetComponent<Rigidbody> ().velocity = controller.getVelocity ();
 			gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getAngularVelocity ();
-			//Highlight ();
 		}
-		else if (isHeld  && controller.controllerNumber != controllerNumberHolding) {
-			//Debug.Log ("Item Switching Hands");
+		else if (isHeld  && controller.GetControllerNumber() != controllerNumberHolding) {
 			isHeld = true;
-			controller.holdingItem = true;
-			controllerNumberHolding = controller.controllerNumber;
-			controller.objectInHand = gameObject;
+			controller.PickUpItem (gameObject);
+			controllerNumberHolding = controller.GetControllerNumber();
 
-			//controllerScipt.SetControllerVisible (controller, false);
-
-			if (gameObject.GetComponent<FixedJoint> ()) {
-				//otherControllerScript.holdingItem = false;
-				controller.objectInHand = null;
+			if (gameObject.GetComponent<ConfigurableJoint> ()) {
+				controller.SetObjectInHand(null);
 				controller.SetControllerVisible (true);
-				gameObject.GetComponent<FixedJoint> ().connectedBody = null;
-				Destroy (gameObject.GetComponent<FixedJoint> ());
+				gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
+				Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 			}
 
-			FixedJoint joint = AddFixedJoint();
+			ConfigurableJoint joint = AddConfigurableJoint(controller);
 			joint.connectedBody = controller.GetComponent<Rigidbody> ();
 			joint.anchor = controller.transform.position;
-			Highlight(false);
 		} 
 		else if (!isHeld) { // Picking Up
-			if (!controller.holdingItem) {
-				//Debug.Log ("Picking Up Item");
+			if (!controller.GetHoldingItem()) {
 				GetComponent<Collider>().isTrigger = true;
 				isHeld = true;
-				controller.holdingItem = true;
-				controllerNumberHolding = controller.controllerNumber;
-				controller.objectInHand = gameObject;
+				controller.PickUpItem (gameObject);
+				controllerNumberHolding = controller.GetControllerNumber();
 
-				//controllerScipt.SetControllerVisible (controller, false);
-
-				FixedJoint joint = AddFixedJoint();
+				ConfigurableJoint joint = AddConfigurableJoint(controller);
 				joint.connectedBody = controller.GetComponent<Rigidbody> ();
 				joint.anchor = controller.transform.position;
-				Highlight(false);
 			}
 		}
 	}
@@ -165,12 +145,9 @@ public class Attachment : Item {
 		if (!attachmentPoint) {
 			PickUp (controller);
 		} else {
-			//Debug.Log ("Trying to attach");
 			if (!isAttached) {
-				//Debug.Log ("Attaching");
 				Attach (controller);
 			} else {
-				//Debug.Log ("Detaching");
 				Detach (controller);
 			}
 		}

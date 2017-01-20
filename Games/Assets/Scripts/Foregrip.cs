@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Foregrip : Attachment {
-	void Start() {
-		isAttachment = true;
-		isAttached = false;
+	protected override void Start() {
+		base.Start ();
 		attachmentType = "Grip";
-		oldMaterial = gameObject.GetComponent<Renderer> ().material;
 	}
 
 	protected override void OnTriggerEnter(Collider col) {
@@ -46,15 +44,14 @@ public class Foregrip : Attachment {
 	}
 
 	protected override void Attach(WandController controller) {
-		controller.objectInHand = null;
-		controller.holdingItem = false;
+		controller.DropItem ();
 		isHeld = false;
 		isAttached = true;
 		attachmentPoint.Highlight (false);
 		GetComponent<Collider> ().isTrigger = false;
 
 		if (gameObject.GetComponent<FixedJoint> ()) {
-			controller.objectInHand = null;
+			controller.SetObjectInHand(null);
 			controller.SetControllerVisible (true);
 			gameObject.GetComponent<FixedJoint> ().connectedBody = null;
 			Destroy (gameObject.GetComponent<FixedJoint> ());
@@ -72,26 +69,5 @@ public class Foregrip : Attachment {
 		joint.anchor = attachmentPoint.transform.position;
 		Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> ());
 		Highlight(false);
-	}
-
-	public virtual ConfigurableJoint AddConfigurableJoint(WandController controller) {
-		attachmentPoint.transform.parent.gameObject.AddComponent<ConfigurableJoint> ();
-		ConfigurableJoint joint = attachmentPoint.transform.parent.GetComponent<ConfigurableJoint> ();
-		joint.connectedBody = controller.transform.GetComponent<Rigidbody>();
-		joint.autoConfigureConnectedAnchor = false;
-		joint.anchor = controller.transform.position;
-		joint.xMotion = ConfigurableJointMotion.Free;
-		joint.yMotion = ConfigurableJointMotion.Free;
-		joint.zMotion = ConfigurableJointMotion.Free;
-
-		joint.angularXMotion = ConfigurableJointMotion.Free;
-		joint.angularYMotion = ConfigurableJointMotion.Free;
-		joint.angularZMotion = ConfigurableJointMotion.Free;
-		joint.targetPosition = controller.transform.position;
-		joint.targetRotation = controller.transform.rotation;
-		joint.breakForce = 10;
-		joint.breakTorque = 10;
-		joint.swapBodies = true;
-		return joint;
 	}
 }

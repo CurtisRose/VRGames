@@ -8,13 +8,13 @@ public class WandController : MonoBehaviour {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
 
-	public GameObject collidingObject; // Object being touched by controller.
-	public GameObject objectInHand; // Object held by controller.
+	private GameObject collidingObject; // Object being touched by controller.
+	private GameObject objectInHand; // Object held by controller.
 
-	public uint controllerNumber = 0;
-	public bool holdingItem = false;
+	private uint controllerNumber = 0;
+	private bool holdingItem = false;
 
-	WandController controllerScript;
+	private WandController controllerScript;
 
 	void Awake() {
 		//Debug.Log ("Testing ControllerGrabItem Awake()");
@@ -24,10 +24,6 @@ public class WandController : MonoBehaviour {
 
 	void Start() {
 		controllerNumber = controller.index;
-	}
-
-	void OnCollisionEnter(Collision col) {
-		Debug.Log (col.gameObject.name);
 	}
 
 	// Sets up other collider as potential grab target.
@@ -41,7 +37,7 @@ public class WandController : MonoBehaviour {
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
 		//Debug.Log ("Still Touching an object");
-		if (!collidingObject) {
+		if (!collidingObject && !objectInHand) {
 			SetCollidingObject (other);
 		}
 	}
@@ -124,6 +120,16 @@ public class WandController : MonoBehaviour {
 		}
 	}
 
+	public void PickUpItem(GameObject item) {
+		SetObjectInHand (item);
+		SetHoldingItem (true);
+	}
+
+	public void DropItem() {
+		SetObjectInHand (null);
+		SetHoldingItem (false);
+	}
+
 	public Vector3 getVelocity() {
 		return controller.velocity;
 	}
@@ -135,56 +141,37 @@ public class WandController : MonoBehaviour {
 	public void VibrateController(int time) {
 		controller.TriggerHapticPulse ((ushort)time);
 	}
+
+	public GameObject GetCollidingObject() {
+		return collidingObject;
+	}
+
+	public void SetCollidingObject(GameObject set) {
+		collidingObject = set;
+	}
+
+	public GameObject GetObjectInHand() {
+		return objectInHand;
+	}
+
+	public void SetObjectInHand(GameObject set) {
+		objectInHand = set;
+	}
+
+	public uint GetControllerNumber() {
+		return controllerNumber;
+	}
+
+	public bool GetHoldingItem() {
+		return holdingItem;
+	}
+
+	public void SetHoldingItem(bool set) {
+		holdingItem = set;
+	}
+
+	public WandController GetControllerScript() {
+		return controllerScript;
+	}
+
 }
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////
-/// Random things to keep for later maybe
-/// 
-/*	
-private Valve.VR.EVRButtonId gripButton = Valve.VR.EVRButtonId.k_EButton_Grip;
-private Valve.VR.EVRButtonId triggerButton = Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger;
-private Valve.VR.EVRButtonId menuButton = Valve.VR.EVRButtonId.k_EButton_ApplicationMenu;
-private Valve.VR.EVRButtonId dashboardButton = Valve.VR.EVRButtonId.k_EButton_Dashboard_Back;
-private Valve.VR.EVRButtonId downButton = Valve.VR.EVRButtonId.k_EButton_DPad_Up;
-private Valve.VR.EVRButtonId upButton = Valve.VR.EVRButtonId.k_EButton_DPad_Down;
-private Valve.VR.EVRButtonId LeftButton = Valve.VR.EVRButtonId.k_EButton_DPad_Left;
-private Valve.VR.EVRButtonId RightButton = Valve.VR.EVRButtonId.k_EButton_DPad_Right;
-
-Valve.VR.EVRButtonId[] buttonIds = new Valve.VR.EVRButtonId[] {
-	Valve.VR.EVRButtonId.k_EButton_ApplicationMenu,
-	Valve.VR.EVRButtonId.k_EButton_Grip,
-	Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad,
-	Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger};
-
-Valve.VR.EVRButtonId[] axisIds = new Valve.VR.EVRButtonId[] {
-	Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad,
-	Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger
-};
-
-if (controller.GetAxis () != Vector2.zero) {
-	//Debug.Log (gameObject.name + " " + controller.GetAxis ());
-}
-if (controller.GetHairTriggerDown ()) {
-	//Debug.Log (gameObject.name + "Trigger Pressed");
-}
-if (controller.GetHairTriggerUp ()) {
-	//Debug.Log (gameObject.name + "Trigger Released");
-}
-if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
-	//Debug.Log (gameObject.name + "Grip Pressed");
-}
-if (controller.GetPressUp (SteamVR_Controller.ButtonMask.Grip)) {
-	//Debug.Log (gameObject.name + "Grip Released");
-}
-// Need to pull harder on the trigger to activate this.
-if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
-	//Debug.Log (gameObject.name + "New Trigger Pressed");
-}
-if (controller.GetPressUp (SteamVR_Controller.ButtonMask.Trigger)) {
-	//Debug.Log (gameObject.name + "New Trigger Released");
-}*/

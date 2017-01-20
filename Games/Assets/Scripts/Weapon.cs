@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class Weapon : Item {
 	public int numBullets;
-	protected Quaternion gripRotation;
-	protected Vector3 gripPosition;
 	protected Quaternion magazineRotation;
 	protected Vector3 magazinePosition;
 	public bool hasMagazine = false;
 
 	// Use this for initialization
-	void Start () {
-		
+	protected override void Start () {
+		base.Start ();
 	}
 	
 	// Update is called once per frame
