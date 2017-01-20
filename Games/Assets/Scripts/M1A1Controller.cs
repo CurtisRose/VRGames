@@ -5,7 +5,7 @@ using UnityEngine;
 public class M1A1Controller : Weapon {
 	public GameObject bulletPrefab;
 	public Transform bulletSpawn;
-	public float bulletSpeed = 9000;
+	public float bulletSpeed = 20000;
 	float time;
 	float rateOfFire = 0.15f;
 	private bool automatic = false;

@@ -8,6 +8,7 @@ public class Attachment : Item {
 	protected string attachmentType;
 	protected AttachmentPoint attachmentPoint;
 	protected Vector3 attachmentPosition;
+	private AudioSource[] attachmentSounds;
 
 	protected override void Start() {
 		base.Start ();
@@ -16,6 +17,7 @@ public class Attachment : Item {
 		attachmentType = null;
 		attachmentPoint = null;
 		attachmentPosition = Vector3.zero;
+		attachmentSounds = GetComponents<AudioSource>();
 	}
 
 	protected virtual void OnTriggerEnter(Collider col) {
@@ -57,6 +59,7 @@ public class Attachment : Item {
 	}
 		
 	protected virtual void Attach(WandController controller) {
+		attachmentSounds [0].Play ();
 		controller.DropItem ();
 		isHeld = false;
 		isAttached = true;
@@ -85,6 +88,7 @@ public class Attachment : Item {
 
 	protected virtual void Detach(WandController controller) {
 		//Debug.Log ("Testing Detach Attachment");
+		attachmentSounds [0].Play ();
 		isAttached = false;
 		attachmentPoint.attachment = null;
 		if (gameObject.GetComponent<ConfigurableJoint> ()) {
