@@ -11,7 +11,6 @@ public class M1A1Controller : Weapon {
 	private bool automatic = false;
 	public AudioSource[] gunSounds;
 
-
 	protected override void Start () {
 		highlightObject = transform.GetChild (0).gameObject;
 		base.Start ();

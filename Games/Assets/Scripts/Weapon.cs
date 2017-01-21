@@ -14,8 +14,8 @@ public class Weapon : Item {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	protected override void Update () {
+		base.Update();
 	}
 
 	public virtual void Reload(Magazine magazineScript) {
@@ -24,11 +24,5 @@ public class Weapon : Item {
 
 	public virtual void Unload(Magazine magazineScript) {
 
-	}
-
-	public virtual ConfigurableJoint AddConfigurableJoint() {
-		ConfigurableJoint joint = gameObject.AddComponent<ConfigurableJoint> ();
-
-		return joint;
 	}
 }

@@ -8,6 +8,7 @@ public class Attachment : Item {
 	protected string attachmentType;
 	protected AttachmentPoint attachmentPoint;
 	protected Vector3 attachmentPosition;
+	protected Vector3 attachmentRotation;
 	private AudioSource[] attachmentSounds;
 
 	protected override void Start() {
@@ -17,6 +18,7 @@ public class Attachment : Item {
 		attachmentType = null;
 		attachmentPoint = null;
 		attachmentPosition = Vector3.zero;
+		attachmentRotation = Vector3.zero;
 		attachmentSounds = GetComponents<AudioSource>();
 	}
 
@@ -26,7 +28,6 @@ public class Attachment : Item {
 				if (attachmentType == col.GetComponent<AttachmentPoint> ().attachmentPointType) {
 					if (!attachmentPoint) {
 						attachmentPoint = col.GetComponent<AttachmentPoint> ();
-						//attachmentPoint.attachment = gameObject.GetComponent<Attachment> ();
 						attachmentPoint.Highlight (true);
 					}
 				}
@@ -74,12 +75,13 @@ public class Attachment : Item {
 			gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
 			Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 		}
-		transform.rotation = attachmentPoint.transform.rotation;
+		Quaternion tempRotation = Quaternion.Euler(attachmentRotation + attachmentPoint.transform.rotation.eulerAngles);
+		transform.rotation = tempRotation;
 		transform.parent = attachmentPoint.transform;
 		transform.position = attachmentPoint.transform.position;
 		transform.localPosition = transform.localPosition + attachmentPosition;
 		transform.parent = null;
-		ConfigurableJoint joint = AddConfigurableJoint(controller);
+		ConfigurableJoint joint = AddConfigurableJoint();
 		joint.connectedBody = attachmentPoint.transform.parent.GetComponent<Rigidbody> ();
 		joint.anchor = attachmentPoint.transform.position;
 		Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> ());
@@ -127,7 +129,7 @@ public class Attachment : Item {
 				Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 			}
 
-			ConfigurableJoint joint = AddConfigurableJoint(controller);
+			ConfigurableJoint joint = AddConfigurableJoint();
 			joint.connectedBody = controller.GetComponent<Rigidbody> ();
 			joint.anchor = controller.transform.position;
 		} 
@@ -138,7 +140,7 @@ public class Attachment : Item {
 				controller.PickUpItem (gameObject);
 				controllerNumberHolding = controller.GetControllerNumber();
 
-				ConfigurableJoint joint = AddConfigurableJoint(controller);
+				ConfigurableJoint joint = AddConfigurableJoint();
 				joint.connectedBody = controller.GetComponent<Rigidbody> ();
 				joint.anchor = controller.transform.position;
 			}

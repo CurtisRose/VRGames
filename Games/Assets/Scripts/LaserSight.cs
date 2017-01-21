@@ -38,7 +38,8 @@ public class LaserSight : Attachment {
 			maxLaserDistance / transform.localScale.z);
 	}
 
-	void Update () {
+	protected override void Update () {
+		base.Update ();
 		if (laserOn) {
 			RaycastHit hit;
 			if (Physics.Raycast (transform.position, -1 * transform.forward, out hit, maxLaserDistance)) {

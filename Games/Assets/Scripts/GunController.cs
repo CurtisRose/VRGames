@@ -24,7 +24,8 @@ public class GunController : Weapon {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	protected override void Update () {
+		base.Update ();
 		// Raycasting to change sight colors
 		Ray ray = new Ray(transform.GetChild (3).GetComponent<Transform>().position, 
 			transform.GetChild (3).GetComponent<Transform>().forward);
