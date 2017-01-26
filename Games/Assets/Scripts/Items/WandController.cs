@@ -16,6 +16,8 @@ public class WandController : MonoBehaviour {
 
 	private WandController controllerScript;
 
+	private PlayerController playerController;
+
 	void Awake() {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 		controllerScript = gameObject.GetComponent<WandController> () as WandController;
@@ -23,6 +25,7 @@ public class WandController : MonoBehaviour {
 
 	void Start() {
 		controllerNumber = controller.index;
+		playerController = GetComponentInParent<PlayerController> ();
 	}
 
 	// Sets up other collider as potential grab target.
@@ -74,6 +77,9 @@ public class WandController : MonoBehaviour {
 			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
 				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
+			if (controller.GetPressUp (SteamVR_Controller.ButtonMask.Trigger)) {
+				objectInHandScript.OnTriggerUp (controllerScript);
+			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
 				objectInHandScript.OnTouchpadDown (controllerScript);
 			}
@@ -91,7 +97,10 @@ public class WandController : MonoBehaviour {
 			}
 		}
 		else {
-			
+			if (controller.GetPress (SteamVR_Controller.ButtonMask.Touchpad)) {
+				//Debug.Log (controller.GetAxis ());
+				playerController.MovePlayer (controller.GetAxis (), transform.rotation.eulerAngles);
+			}
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
 			Debug.Log ("Controller: " + controllerNumber);
