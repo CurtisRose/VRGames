@@ -7,7 +7,7 @@ public class Foregrip : Attachment {
 	WandController heldController;
 	protected override void Start() {
 		base.Start ();
-		attachmentType = "Grip";
+		attachmentType = "Other";
 		attachmentPosition = new Vector3 (-4.0f, 0 , 0);
 		attachmentRotation = Quaternion.Euler(0, 0, 90);
 	}

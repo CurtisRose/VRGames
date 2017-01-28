@@ -7,6 +7,8 @@ public class WandController : MonoBehaviour {
 	private SteamVR_Controller.Device controller {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
+	public Vector3 GetVelocity { get { return controller.velocity; } }
+	public Vector3 GetAngularVelocity { get { return controller.angularVelocity; } }
 
 	public GameObject collidingObject; // Object being touched by controller.
 	private GameObject objectInHand; // Object held by controller.
@@ -32,7 +34,6 @@ public class WandController : MonoBehaviour {
 	public void OnTriggerEnter(Collider other) {
 		if (other.transform.GetComponent (typeof(Item))) {
 			if (!collidingObject && !objectInHand) {
-				Debug.Log ("Colliding with " + other.gameObject.name);
 				SetCollidingObject (other);
 			}
 		}
@@ -72,6 +73,7 @@ public class WandController : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
+		Debug.Log (GetVelocity);
 		if (objectInHand) {
 			Item objectInHandScript = objectInHand.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
@@ -129,14 +131,6 @@ public class WandController : MonoBehaviour {
 	public void DropItem() {
 		SetObjectInHand (null);
 		SetHoldingItem (false);
-	}
-
-	public Vector3 getVelocity() {
-		return controller.velocity;
-	}
-
-	public Vector3 getAngularVelocity() {
-		return controller.angularVelocity;
 	}
 
 	public void VibrateController(int time) {

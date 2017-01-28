@@ -42,8 +42,8 @@ public class PistolController  : Weapon {
 					GetComponent<FixedJoint> ().connectedBody = null;
 					Destroy (GetComponent<FixedJoint> ());
 				}
-				gameObject.GetComponent<Rigidbody> ().velocity = controller.getVelocity ();
-				gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getVelocity ();
+				gameObject.GetComponent<Rigidbody> ().velocity = controller.GetVelocity;
+				gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.GetVelocity;
 			} else {
 				//Debug.Log ("Gun Swapping Hands");
 				controller.PickUpItem(gameObject);

@@ -123,8 +123,8 @@ public class Attachment : Item {
 				Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 			}
 
-			gameObject.GetComponent<Rigidbody> ().velocity = controller.getVelocity ();
-			gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.getAngularVelocity ();
+			//gameObject.GetComponent<Rigidbody> ().velocity = controller.GetVelocity;
+			//gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.GetAngularVelocity;
 		}
 		else if (isHeld  && controller.GetControllerNumber() != controllerNumberHolding) {
 			isHeld = true;
