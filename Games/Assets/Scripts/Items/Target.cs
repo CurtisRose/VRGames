@@ -11,7 +11,7 @@ public class Target : MonoBehaviour {
 		gameObject.transform.GetChild(0).GetComponent<Renderer>().material = targetUnhitRed;
 	}
 
-	void OnCollisionEnter () {
+	public void SwitchColors() {
 		if (transform.GetChild (0).GetComponent<Renderer> ().material.name == (targetUnhitRed.name + " (Instance)")) {
 			transform.GetChild (0).GetComponent<Renderer> ().material = targetHitGreen;
 		} else {

@@ -8,7 +8,7 @@ public class Attachment : Item {
 	protected string attachmentType;
 	protected AttachmentPoint attachmentPoint;
 	protected Vector3 attachmentPosition;
-	protected Vector3 attachmentRotation;
+	protected Quaternion attachmentRotation;
 	private AudioSource[] attachmentSounds;
 
 	protected override void Start() {
@@ -18,7 +18,7 @@ public class Attachment : Item {
 		attachmentType = null;
 		attachmentPoint = null;
 		attachmentPosition = Vector3.zero;
-		attachmentRotation = Vector3.zero;
+		attachmentRotation = Quaternion.Euler(Vector3.zero);
 		attachmentSounds = GetComponents<AudioSource>();
 	}
 
@@ -69,6 +69,7 @@ public class Attachment : Item {
 		GetComponent<Collider> ().isTrigger = false;
 		controllerNumberHolding = 0;
 		attachmentPoint.attachment = GetComponent<Attachment>();
+		attachmentPoint.MakeClear ();
 		
 		if (gameObject.GetComponent<ConfigurableJoint> ()) {
 			controller.SetObjectInHand(null);
@@ -76,17 +77,17 @@ public class Attachment : Item {
 			gameObject.GetComponent<ConfigurableJoint> ().connectedBody = null;
 			Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 		}
-		Quaternion tempRotation = Quaternion.Euler(attachmentRotation + attachmentPoint.transform.rotation.eulerAngles);
-		transform.rotation = tempRotation;
-		transform.parent = attachmentPoint.transform;
+			
+		transform.rotation = attachmentPoint.transform.rotation;
 		transform.position = attachmentPoint.transform.position;
-		transform.localPosition = transform.localPosition + attachmentPosition;
+		transform.parent = attachmentPoint.transform;
+		Vector3 tempPosition = attachmentPoint.transform.localPosition + attachmentPosition;
+		transform.localPosition = tempPosition;
 		transform.parent = null;
-		//ConfigurableJoint joint = AddConfigurableJoint();
+
 		FixedJoint joint = AddFixedJoint();
 		joint.connectedBody = attachmentPoint.transform.parent.GetComponent<Rigidbody> ();
 		joint.anchor = attachmentPoint.transform.localPosition;
-		//Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> ());
 		Highlight(false);
 	}
 
@@ -95,6 +96,7 @@ public class Attachment : Item {
 		attachmentSounds [0].Play ();
 		isAttached = false;
 		//attachmentPoint.ToggleCollider ();
+		attachmentPoint.MakeUnclear ();
 		attachmentPoint.attachment = null;
 		if (GetComponent<ConfigurableJoint> ()) {
 			GetComponent<ConfigurableJoint> ().connectedBody = null;

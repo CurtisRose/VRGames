@@ -8,7 +8,7 @@ public class WandController : MonoBehaviour {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
 
-	private GameObject collidingObject; // Object being touched by controller.
+	public GameObject collidingObject; // Object being touched by controller.
 	private GameObject objectInHand; // Object held by controller.
 
 	private uint controllerNumber = 0;
@@ -30,25 +30,31 @@ public class WandController : MonoBehaviour {
 
 	// Sets up other collider as potential grab target.
 	public void OnTriggerEnter(Collider other) {
-		if (!collidingObject && !objectInHand) {
-			SetCollidingObject (other);
+		if (other.transform.GetComponent (typeof(Item))) {
+			if (!collidingObject && !objectInHand) {
+				Debug.Log ("Colliding with " + other.gameObject.name);
+				SetCollidingObject (other);
+			}
 		}
 	}
 
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
-		if (!collidingObject && !objectInHand) {
-			SetCollidingObject (other);
+		if (other.transform.GetComponent (typeof(Item))) {
+			if (!collidingObject && !objectInHand) {
+				SetCollidingObject (other);
+			}
 		}
 	}
 
 	// Removes other as a potential grab target.
 	public void OnTriggerExit(Collider other) {
 		if (!collidingObject) {
+			//Debug.Log ("Error");
 			return;
 		}
-		else if (other == collidingObject.GetComponent<Collider>()) {
-			if (other.transform.GetComponent (typeof(Item))) {
+		else if (other.transform.GetComponent (typeof(Item))) {
+			if (other.gameObject == collidingObject) {
 				Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
 				itemScript.Highlight (false);
 				collidingObject = null;

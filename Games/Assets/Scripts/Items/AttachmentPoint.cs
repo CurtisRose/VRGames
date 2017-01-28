@@ -24,6 +24,14 @@ public class AttachmentPoint : MonoBehaviour {
 		}
 	}
 
+	public void MakeClear() {
+		GetComponent<MeshRenderer> ().enabled = false;
+	}
+
+	public void MakeUnclear() {
+		GetComponent<MeshRenderer> ().enabled = true;
+	}
+
 	//public void ToggleCollider() {
 	//	gameObject.GetComponent<Collider> ().enabled = !gameObject.GetComponent<Collider> ().enabled;
 	//}

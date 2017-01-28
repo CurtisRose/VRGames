@@ -9,7 +9,7 @@ public class SniperScope : Attachment {
 		highlightObject = transform.GetChild (0).GetChild (0).gameObject;
 		base.Start ();
 		attachmentType = "Optics";
-		attachmentPosition = new Vector3 (4, 0 ,0);
+		attachmentPosition = new Vector3 (0.0f, 12.0f ,0.0f);
 
 		renderTexture = new RenderTexture(256, 256, 24);
 		renderTexture.Create ();

@@ -7,6 +7,7 @@ public class Magazine : Item {
 	public Vector3 attachLocation;
 	public bool attached = false;
 	public Weapon attachedWeapon;
+	public string gunName;
 
 	protected override void Start() {
 		base.Start();
@@ -19,8 +20,10 @@ public class Magazine : Item {
 				if (!attached) {
 					if (!col.gameObject.GetComponentInChildren<Weapon> ().hasMagazine) {
 						//Debug.Log ("Testing magazine collision enter");
-						attached = true;
-						Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+						if (col.gameObject.GetComponentInChildren<Weapon> ().gunName == gunName) {
+							attached = true;
+							Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+						}
 					}
 				}
 			}

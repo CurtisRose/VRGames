@@ -8,41 +8,43 @@ public class LaserSight : Attachment {
 	private float maxLaserDistance = 100;
 
 	protected override void Start () {
+		highlightObject = transform.GetChild(0).gameObject;
 		base.Start ();
-		transform.GetChild (0).gameObject.SetActive (false);
-		transform.GetChild(1).gameObject.SetActive (false);
-		attachmentType = "Optics";
+		highlightObject.transform.GetChild (0).gameObject.SetActive (false);
+		highlightObject.transform.GetChild(1).gameObject.SetActive (false);
+		attachmentPosition = new Vector3 (0.0f, -38.0f ,-0.2f);
+		attachmentType = "Other";
 	}
 
 	private void ShowLaser(RaycastHit hit) {
-		transform.GetChild(0).position = Vector3.Lerp (transform.position, hitPoint, 0.5f);
-		transform.GetChild(0).LookAt (hitPoint);
-		transform.GetChild (1).position = hitPoint;
+		highlightObject.transform.GetChild(0).position = Vector3.Lerp (highlightObject.transform.position, hitPoint, 0.5f);
+		highlightObject.transform.GetChild(0).LookAt (hitPoint);
+		highlightObject.transform.GetChild (1).position = hitPoint;
 
-		transform.GetChild (0).localScale = new Vector3 (
-			transform.GetChild (0).localScale.x,
-			transform.GetChild (0).localScale.y,
-			hit.distance / transform.localScale.z);
+		highlightObject.transform.GetChild (0).localScale = new Vector3 (
+			highlightObject.transform.GetChild (0).localScale.x,
+			highlightObject.transform.GetChild (0).localScale.y,
+			hit.distance / highlightObject.transform.localScale.z);
 
-		transform.GetChild(1).gameObject.SetActive (true);
+		highlightObject.transform.GetChild(1).gameObject.SetActive (true);
 	}
 
 	private void ShowLaserInfinite() {
-		transform.GetChild(1).gameObject.SetActive (false);
-		transform.GetChild(0).position = Vector3.Lerp (transform.position, transform.position + (-1 * transform.forward * maxLaserDistance), 0.5f);
-		transform.GetChild (0).LookAt (transform.position);
+		highlightObject.transform.GetChild(1).gameObject.SetActive (false);
+		highlightObject.transform.GetChild(0).position = Vector3.Lerp (highlightObject.transform.position, highlightObject.transform.position + (-1 * highlightObject.transform.forward * maxLaserDistance), 0.5f);
+		highlightObject.transform.GetChild (0).LookAt (highlightObject.transform.position);
 		
-		transform.GetChild (0).localScale = new Vector3 (
-			transform.GetChild (0).localScale.x,
-			transform.GetChild (0).localScale.y,
-			maxLaserDistance / transform.localScale.z);
+		highlightObject.transform.GetChild (0).localScale = new Vector3 (
+			highlightObject.transform.GetChild (0).localScale.x,
+			highlightObject.transform.GetChild (0).localScale.y,
+			maxLaserDistance / highlightObject.transform.localScale.z);
 	}
 
 	protected override void Update () {
 		base.Update ();
 		if (laserOn) {
 			RaycastHit hit;
-			if (Physics.Raycast (transform.position, -1 * transform.forward, out hit, maxLaserDistance)) {
+			if (Physics.Raycast (highlightObject.transform.position, -1 * highlightObject.transform.forward, out hit, maxLaserDistance)) {
 				hitPoint = hit.point;
 				ShowLaser (hit);
 			} else {
@@ -55,11 +57,11 @@ public class LaserSight : Attachment {
 		if (!laserOn) {
 			laserOn = true;
 			ShowLaserInfinite ();
-			transform.GetChild(0).gameObject.SetActive (true);
+			highlightObject.transform.GetChild(0).gameObject.SetActive (true);
 		} else {
 			laserOn = false;
-			transform.GetChild(0).gameObject.SetActive (false);
-			transform.GetChild(1).gameObject.SetActive (false);
+			highlightObject.transform.GetChild(0).gameObject.SetActive (false);
+			highlightObject.transform.GetChild(1).gameObject.SetActive (false);
 		}
 	}
 

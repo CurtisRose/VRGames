@@ -9,7 +9,7 @@ public class Foregrip : Attachment {
 		base.Start ();
 		attachmentType = "Grip";
 		attachmentPosition = new Vector3 (-4.0f, 0 , 0);
-		attachmentRotation = new Vector3 (0, 0, 90);
+		attachmentRotation = Quaternion.Euler(0, 0, 90);
 	}
 
 

@@ -7,6 +7,7 @@ public class Weapon : Item {
 	protected Quaternion magazineRotation;
 	protected Vector3 magazinePosition;
 	public bool hasMagazine = false;
+	public string gunName;
 
 	// Use this for initialization
 	protected override void Start () {
