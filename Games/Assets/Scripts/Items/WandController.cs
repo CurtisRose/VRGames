@@ -11,7 +11,8 @@ public class WandController : MonoBehaviour {
 	public Vector3 GetAngularVelocity { get { return controller.angularVelocity; } }
 
 	public GameObject collidingObject; // Object being touched by controller.
-	private GameObject objectInHand; // Object held by controller.
+	public GameObject objectInHand; // Object held by controller.
+	public GameObject secondaryHoldObject;
 
 	private uint controllerNumber = 0;
 	private bool holdingItem = false;
@@ -19,6 +20,10 @@ public class WandController : MonoBehaviour {
 	private WandController controllerScript;
 
 	private PlayerController playerController;
+
+	// Sketchy hack, originally used for magazines.
+	// When you load a magazine it makes sure your colliding object isn't immediately the gun.
+	public bool doNotSetCollidingObject = false;
 
 	void Awake() {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
@@ -33,17 +38,30 @@ public class WandController : MonoBehaviour {
 	// Sets up other collider as potential grab target.
 	public void OnTriggerEnter(Collider other) {
 		if (other.transform.GetComponent (typeof(Item))) {
-			if (!collidingObject && !objectInHand) {
-				SetCollidingObject (other);
+			if (!collidingObject && !objectInHand && !secondaryHoldObject) {
+				if (doNotSetCollidingObject) {
+					//Debug.Log ("Testing");
+					doNotSetCollidingObject = false;
+					SetCollidingObject (null);
+				} else {
+					SetCollidingObject (other.gameObject);
+				}
 			}
 		}
 	}
 
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
-		if (other.transform.GetComponent (typeof(Item))) {
-			if (!collidingObject && !objectInHand) {
-				SetCollidingObject (other);
+		if (other.transform.GetComponent<Magazine> ()) {
+			if (!objectInHand && !secondaryHoldObject) {
+				if (collidingObject) {
+					collidingObject.GetComponent<Item> ().Highlight (false);
+				}
+				SetCollidingObject (other.gameObject);
+			}
+		} else if (other.transform.GetComponent<Item> ()) {
+			if (!collidingObject && !objectInHand && !secondaryHoldObject) {
+				SetCollidingObject (other.gameObject);
 			}
 		}
 	}
@@ -63,17 +81,22 @@ public class WandController : MonoBehaviour {
 		}
 	}
 
-	private void SetCollidingObject(Collider col) {
-		if (col.transform.GetComponent (typeof(Item))) {
-			Item itemScript = col.transform.GetComponent (typeof(Item)) as Item;
-			itemScript.Highlight (true);
-			collidingObject = col.gameObject;
+	public void SetCollidingObject(GameObject gameObject) {
+		if (gameObject) {
+			if (gameObject.transform.GetComponent<Item> ()) {
+				Item itemScript = gameObject.transform.GetComponent (typeof(Item)) as Item;
+				itemScript.Highlight (true);
+				collidingObject = gameObject.gameObject;
+			}
+		} else {
+			collidingObject = null;
 		}
 	}
 		
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (GetVelocity);
+		//transform.parent.transform.position = transform.position;
+		//transform.parent.transform.rotation = transform.rotation;
 		if (objectInHand) {
 			Item objectInHandScript = objectInHand.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
@@ -104,7 +127,13 @@ public class WandController : MonoBehaviour {
 				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
 		}
-		else {
+		else if(secondaryHoldObject) {
+			Item secondaryHoldObjectScript = secondaryHoldObject.GetComponent (typeof(Item)) as Item;
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
+				Debug.Log ("Testing");
+				secondaryHoldObjectScript.OnGripDown (controllerScript);
+			}
+		} else {
 			if (controller.GetPress (SteamVR_Controller.ButtonMask.Touchpad)) {
 				//Debug.Log (controller.GetAxis ());
 				playerController.MovePlayer (controller.GetAxis (), transform.rotation.eulerAngles);
@@ -112,6 +141,9 @@ public class WandController : MonoBehaviour {
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
 			Debug.Log ("Controller: " + controllerNumber);
+		}
+		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.System)) {
+			Debug.Log("Button Pressed");
 		}
 	}
 
@@ -121,6 +153,7 @@ public class WandController : MonoBehaviour {
 				child.enabled = isVisible;
 			}
 		}
+		GetComponent<Collider> ().enabled = isVisible;
 	}
 
 	public void PickUpItem(GameObject item) {
@@ -141,9 +174,9 @@ public class WandController : MonoBehaviour {
 		return collidingObject;
 	}
 
-	public void SetCollidingObject(GameObject set) {
+	/*public void SetCollidingObject(GameObject set) {
 		collidingObject = set;
-	}
+	}*/
 
 	public GameObject GetObjectInHand() {
 		return objectInHand;

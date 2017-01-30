@@ -36,10 +36,10 @@ public class PlayerController : MonoBehaviour {
 			playerSounds [0].Play ();
 		}
 		if (health <= fullHealth) {
-			Debug.Log ("Dislplaying blood.");
-			Debug.Log ("Fullhealth: " + fullHealth);
-			Debug.Log ("Health: " + health);
-			Debug.Log ((float)Mathf.Abs (fullHealth - health) / fullHealth);
+			//Debug.Log ("Dislplaying blood.");
+			//Debug.Log ("Fullhealth: " + fullHealth);
+			//Debug.Log ("Health: " + health);
+			//Debug.Log ((float)Mathf.Abs (fullHealth - health) / fullHealth);
 			BleedBehavior.BloodAmount = (float)Mathf.Abs (fullHealth - health) / fullHealth * 2;
 		}
 		health -= damage;

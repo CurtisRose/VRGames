@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Attachment : Item {
 	protected bool isAttachment;
-	protected bool isAttached;
+	public bool isAttached;
 	protected string attachmentType;
-	protected AttachmentPoint attachmentPoint;
+	public AttachmentPoint attachmentPoint;
 	protected Vector3 attachmentPosition;
 	protected Quaternion attachmentRotation;
 	private AudioSource[] attachmentSounds;
@@ -66,7 +66,7 @@ public class Attachment : Item {
 		isAttached = true;
 		attachmentPoint.Highlight (false);
 		//attachmentPoint.ToggleCollider ();
-		GetComponent<Collider> ().isTrigger = false;
+		//GetComponent<Collider> ().isTrigger = false;
 		controllerNumberHolding = 0;
 		attachmentPoint.attachment = GetComponent<Attachment>();
 		attachmentPoint.MakeClear ();
@@ -83,11 +83,15 @@ public class Attachment : Item {
 		transform.parent = attachmentPoint.transform;
 		Vector3 tempPosition = attachmentPoint.transform.localPosition + attachmentPosition;
 		transform.localPosition = tempPosition;
-		transform.parent = null;
+		//transform.parent = null;
+		transform.parent = attachmentPoint.transform.parent;
+		if (GetComponent<Rigidbody>()) {
+			Destroy (GetComponent<Rigidbody> ());
+		}
 
-		FixedJoint joint = AddFixedJoint();
-		joint.connectedBody = attachmentPoint.transform.parent.GetComponent<Rigidbody> ();
-		joint.anchor = attachmentPoint.transform.localPosition;
+		//FixedJoint joint = AddFixedJoint();
+		//joint.connectedBody = attachmentPoint.transform.parent.GetComponent<Rigidbody> ();
+		//joint.anchor = attachmentPoint.transform.localPosition;
 		Highlight(false);
 	}
 
@@ -106,6 +110,7 @@ public class Attachment : Item {
 			GetComponent<FixedJoint> ().connectedBody = null;
 			Destroy (GetComponent<FixedJoint> ());
 		}
+		gameObject.AddComponent<Rigidbody> ();
 		transform.parent = null;
 		//Physics.IgnoreCollision (GetComponent<Collider> (), attachmentPoint.transform.parent.GetComponent<Collider> (), false);
 		PickUp (controller);
@@ -123,8 +128,8 @@ public class Attachment : Item {
 				Destroy (gameObject.GetComponent<ConfigurableJoint> ());
 			}
 
-			//gameObject.GetComponent<Rigidbody> ().velocity = controller.GetVelocity;
-			//gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.GetAngularVelocity;
+			gameObject.GetComponent<Rigidbody> ().velocity = controller.GetVelocity;
+			gameObject.GetComponent<Rigidbody> ().angularVelocity = controller.GetAngularVelocity;
 		}
 		else if (isHeld  && controller.GetControllerNumber() != controllerNumberHolding) {
 			isHeld = true;

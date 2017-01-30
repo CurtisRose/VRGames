@@ -14,14 +14,14 @@ public class Magazine : Item {
 		numBullets = 30;
 	}
 
-	void OnCollisionEnter(Collision col) {
+	void OnTriggerEnter(Collider col) {
 		if (col.gameObject.GetComponentInChildren<Weapon>()) {
+			//Debug.Log ("Attempting to reload");
 			if (isHeld) {
 				if (!attached) {
 					if (!col.gameObject.GetComponentInChildren<Weapon> ().hasMagazine) {
 						//Debug.Log ("Testing magazine collision enter");
 						if (col.gameObject.GetComponentInChildren<Weapon> ().gunName == gunName) {
-							attached = true;
 							Attach (col.gameObject.GetComponentInChildren<Weapon> ());
 						}
 					}
@@ -30,12 +30,18 @@ public class Magazine : Item {
 		}
 	}
 
-	void OnCollisionExit(Collision col) {
+	void OnTriggerStay(Collider col) {
+		if (col.gameObject.GetComponent<WandController> ()) {
+			col.gameObject.GetComponent<WandController> ().SetCollidingObject (gameObject);
+		}
+	}
+
+	void OnTriggerExit(Collider col) {
 		if (col.gameObject.GetComponentInChildren<Weapon>()) {
 			if (isHeld) {
 				if (attached) {
 					attached = false;
-					transform.parent = null;
+					transform.parent = holdingController.transform;
 					attachedWeapon = null;
 				}
 			}
@@ -43,17 +49,20 @@ public class Magazine : Item {
 	}
 		
 	void Attach(Weapon weapon) {
+		attached = true;
+		holdingController.doNotSetCollidingObject = true;
 		weapon.Reload (gameObject.GetComponent<Magazine>());
 		attachedWeapon = weapon;
-		holdingController.SetCollidingObject(null);
 		controllerNumberHolding = 0;
+		holdingController.SetCollidingObject (null);
 		holdingController = null;
+		SetIsHeld (false);
 	}
 
 	void Unattach(Weapon weapon) {
 		weapon.Unload (gameObject.GetComponent<Magazine>());
 		// If there are less than 6 bullets then check how many, then Destroy the correct bullets in the magzine.
-		if (numBullets < 6) {
+		/*if (numBullets < 6) {
 			if (numBullets == 5) {
 				if (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
 					Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
@@ -79,7 +88,7 @@ public class Magazine : Item {
 					Destroy (transform.GetChild (0).gameObject);
 				}
 			} 
-		}
+		}*/
 	}
 
 	public override void OnGripDown(WandController controller) {

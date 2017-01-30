@@ -13,11 +13,6 @@ public class Weapon : Item {
 	protected override void Start () {
 		base.Start ();
 	}
-	
-	// Update is called once per frame
-	protected override void Update () {
-		base.Update();
-	}
 
 	public virtual void Reload(Magazine magazineScript) {
 
@@ -25,5 +20,9 @@ public class Weapon : Item {
 
 	public virtual void Unload(Magazine magazineScript) {
 
+	}
+
+	public Quaternion GetGripRotation() {
+		return gripRotation;
 	}
 }

@@ -14,7 +14,7 @@ public class RifleFlashlight : Attachment {
 		light = GetComponentInChildren<Light> ();
 	}
 
-	void turnLaserOn () {
+	void TurnFlashlightOn () {
 		if (!light.enabled) {
 			light.enabled = true;
 		} else {
@@ -24,6 +24,6 @@ public class RifleFlashlight : Attachment {
 	}
 
 	public override void OnTriggerDown(WandController controller) {
-		turnLaserOn ();
+		TurnFlashlightOn ();
 	}
 }
