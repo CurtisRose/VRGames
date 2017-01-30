@@ -11,7 +11,7 @@ public class Recoil : MonoBehaviour
     public void StartRecoil (float recoilParam, float maxRecoil_xParam, float recoilSpeedParam)
     {
         // in seconds
-        recoil = recoilParam;
+        recoil += recoilParam;
         maxRecoil_x = maxRecoil_xParam;
         recoilSpeed = recoilSpeedParam;
         maxRecoil_y = Random.Range(-maxRecoil_xParam, maxRecoil_xParam);
