@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	public static int levelNumber = 0;
 	static GameController instance;
 	public int numSpawnpoints;
-	public int spawnTime = 20;
+	private int spawnTime = 5;
 	private PlayerController playerController;
 	private static int playerScore;
 	private static int zombiePoints = 100;
@@ -62,6 +62,7 @@ public class GameController : MonoBehaviour {
 		numZombiesLevel = numSpawnpoints + numZombiesLevel;
 		foreach (Spawnpoint point in spawnpoints) {
 			point.target = GetComponentInChildren<PlayerController> ().transform.GetChild (0).GetChild (2).transform;
+			//point.target = GameObject.FindWithTag("Player").transform;
 			point.PrepareSpawning (levelNumber, spawnTime, zombieHealth);
 		}
 		spawnTime -= 1;

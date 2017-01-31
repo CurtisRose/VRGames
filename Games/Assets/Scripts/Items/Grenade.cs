@@ -59,11 +59,11 @@ public class Grenade : Item {
 				//Debug.Log ("Damaging zombie");
 				float distance = (collider.transform.position - transform.position).magnitude;
 				if (distance > (radius / 2)) {
-					float calcDamage = damage * (2 * distance / radius);
-					//Debug.Log ("Doing " + (int)calcDamage/2 + " In CalcDamage");
-					collider.GetComponent<ZombieController> ().DoDamage ((int)calcDamage/2);
+					float calcDamage = damage * ((radius - distance) / radius * 2);
+					//Debug.Log ("Doing " + (int)calcDamage + " In CalcDamage at " + distance + " distance.");
+					collider.GetComponent<ZombieController> ().DoDamage ((int)calcDamage);
 				} else {
-					//Debug.Log ("Doing " + damage + " In Damage");
+					//Debug.Log ("Doing " + damage + " In Damage at " + distance + " distance.");
 					collider.GetComponent<ZombieController> ().DoDamage (damage);
 				}
 			}

@@ -44,14 +44,13 @@ public class ZombieController : MonoBehaviour {
 	}
 
 	void Update () {
+		agent.SetDestination (target.position);
 		if (health > 0) {
-			agent.SetDestination (target.position);
 			//Debug.Log ("Remaining Distance: " + Mathf.Abs((agent.transform.position - target.transform.position).magnitude));
 			if (Mathf.Abs((agent.transform.position - target.transform.position).magnitude) > attackDistance) {
 				GetComponent<Animator> ().Play ("walk");
 			} else {
 				//Debug.Log ("attacking");
-				agent.SetDestination (transform.position);
 				GetComponent<Animator> ().Play ("attack");
 				if (Time.realtimeSinceStartup - time > attackSpeed) {
 					time = Time.realtimeSinceStartup;
@@ -60,7 +59,7 @@ public class ZombieController : MonoBehaviour {
 				}
 			}
 		} else {
-			agent.Stop ();
+			Destroy (agent);
 			GetComponent<Animator> ().Play ("back_fall");
 			if (alive) {
 				//Debug.Log ("Zombie Killed");
