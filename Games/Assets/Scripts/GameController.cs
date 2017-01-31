@@ -61,7 +61,7 @@ public class GameController : MonoBehaviour {
 		numZombies = numSpawnpoints + numZombiesLevel;
 		numZombiesLevel = numSpawnpoints + numZombiesLevel;
 		foreach (Spawnpoint point in spawnpoints) {
-			point.target = GetComponentInChildren<PlayerController> ().transform.GetChild (0).GetChild (0).transform;
+			point.target = GetComponentInChildren<PlayerController> ().transform.GetChild (0).GetChild (2).transform;
 			point.PrepareSpawning (levelNumber, spawnTime, zombieHealth);
 		}
 		spawnTime -= 1;

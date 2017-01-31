@@ -62,6 +62,8 @@ public class WandController : MonoBehaviour {
 		} else if (other.transform.GetComponent<Item> ()) {
 			if (!collidingObject && !objectInHand && !secondaryHoldObject) {
 				SetCollidingObject (other.gameObject);
+			} else if (collidingObject && !objectInHand && !secondaryHoldObject) {
+				collidingObject.GetComponent<Item>().Highlight(true);
 			}
 		}
 	}
@@ -75,6 +77,7 @@ public class WandController : MonoBehaviour {
 		else if (other.transform.GetComponent (typeof(Item))) {
 			if (other.gameObject == collidingObject) {
 				Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
+				itemScript.collidingController = null;
 				itemScript.Highlight (false);
 				collidingObject = null;
 			}
@@ -86,9 +89,16 @@ public class WandController : MonoBehaviour {
 			if (gameObject.transform.GetComponent<Item> ()) {
 				Item itemScript = gameObject.transform.GetComponent (typeof(Item)) as Item;
 				itemScript.Highlight (true);
-				collidingObject = gameObject.gameObject;
+				itemScript.collidingController = this;
+				collidingObject = gameObject;
 			}
 		} else {
+			if (collidingObject) {
+				if (collidingObject.GetComponent<Item>()) {
+					collidingObject.GetComponent<Item> ().collidingController = null;
+					collidingObject = null;
+				}
+			}
 			collidingObject = null;
 		}
 	}
@@ -101,6 +111,9 @@ public class WandController : MonoBehaviour {
 			Item objectInHandScript = objectInHand.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				objectInHandScript.OnGripDown (controllerScript);
+			}
+			if (controller.GetPressUp (SteamVR_Controller.ButtonMask.Grip)) {
+				objectInHandScript.OnGripUp (controllerScript);
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
 				objectInHandScript.OnTriggerDown (controllerScript);
@@ -130,7 +143,6 @@ public class WandController : MonoBehaviour {
 		else if(secondaryHoldObject) {
 			Item secondaryHoldObjectScript = secondaryHoldObject.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
-				Debug.Log ("Testing");
 				secondaryHoldObjectScript.OnGripDown (controllerScript);
 			}
 		} else {
@@ -164,6 +176,7 @@ public class WandController : MonoBehaviour {
 	public void DropItem() {
 		SetObjectInHand (null);
 		SetHoldingItem (false);
+		SetCollidingObject (null);
 	}
 
 	public void VibrateController(int time) {

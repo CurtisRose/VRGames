@@ -44,13 +44,6 @@ public class ZombieController : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			//Debug.Log ("Pressed Space, Attack");
-			GetComponent<Animator> ().Play ("attack");
-		}
-
-
-
 		if (health > 0) {
 			agent.SetDestination (target.position);
 			//Debug.Log ("Remaining Distance: " + Mathf.Abs((agent.transform.position - target.transform.position).magnitude));
