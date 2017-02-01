@@ -84,10 +84,12 @@ public class Grenade : Item {
 
 	public override void OnTriggerUp(WandController controller) {
 		handleDown = false;
-		if (pin.GetComponent<Item>()) {
-			if (pin.GetComponent<Item> ().collidingController) {
-				pin.GetComponent<Item> ().collidingController.SetCollidingObject (null);
-				pin.GetComponent<Item> ().Highlight (false);
+		if (pin) {
+			if (pin.GetComponent<Item> ()) {
+				if (pin.GetComponent<Item> ().collidingController) {
+					pin.GetComponent<Item> ().collidingController.SetCollidingObject (null);
+					pin.GetComponent<Item> ().Highlight (false);
+				}
 			}
 		}
 	}

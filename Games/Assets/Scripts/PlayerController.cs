@@ -15,10 +15,21 @@ public class PlayerController : MonoBehaviour {
 	private float strafeSpeed = 0f;
 	private float runningMultiplier = 1.5f;
 
+	CharacterController characterController;
+	public ZombieController zombie;
+
 	// Use this for initialization
 	void Start () {
 		playerSounds = GetComponents<AudioSource> ();
 		GameController.SetPlayerHealth (health);
+		characterController = GetComponentInChildren<CharacterController> ();
+		Collider[] colliders = zombie.GetComponentsInChildren<Collider> ();
+		foreach (Collider collider in colliders) {
+			//Debug.Log ("Test");
+			Physics.IgnoreCollision (characterController.GetComponent<Collider> (), collider);
+		}
+		//Debug.Log (characterController.GetComponent<Collider> ().gameObject.name);
+		Physics.IgnoreCollision (characterController.GetComponent<Collider> (), zombie.GetComponent<Collider>());
 	}
 
 	private void CalculateSpeed(ref float speed, float inputValue) {
@@ -64,12 +75,19 @@ public class PlayerController : MonoBehaviour {
 			tempRunningMultiplier = runningMultiplier;
 		}
 
-		movement = GameController.movementController.transform.forward * movementSpeed * tempRunningMultiplier * Time.deltaTime;
-		strafe = GameController.movementController.transform.right * strafeSpeed * tempRunningMultiplier * Time.deltaTime;
-
+		//Debug.Log ("1 " + GameController.movementController.transform.forward);
+		//Debug.Log ("2 " + movementSpeed);
+		//Debug.Log ("3 " + tempRunningMultiplier);
+		movement = GameController.movementController.transform.forward * movementSpeed * tempRunningMultiplier;// * Time.deltaTime;
+		strafe = GameController.movementController.transform.right * strafeSpeed * tempRunningMultiplier;// * Time.deltaTime;
+		//Debug.Log ("Movement = " + movement);
+		//Debug.Log ("Strafe = " + strafe);
 		float fixY = transform.position.y;
-		transform.position += (movement + strafe);
-		transform.position = new Vector3 (transform.position.x, fixY, transform.position.z);
+		Vector3 temp = movement + strafe;
+		//transform.position += (movement + strafe);
+		//transform.position = new Vector3 (transform.position.x, fixY, transform.position.z);
+		//Debug.Log(temp);
+		characterController.SimpleMove(temp);
 	}
 
 	private void FixedUpdate() {

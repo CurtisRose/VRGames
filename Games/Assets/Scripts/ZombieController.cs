@@ -11,7 +11,7 @@ public class ZombieController : MonoBehaviour {
 	private GameController gameController;
 	AudioSource[] zombieSounds;
 	int damage = 10;
-	float attackDistance = 4.0f;
+	float attackDistance = 2.0f;
 	float time;
 	float attackSpeed = 2.0f;
 
@@ -49,6 +49,7 @@ public class ZombieController : MonoBehaviour {
 			if (Mathf.Abs((agent.transform.position - target.transform.position).magnitude) > attackDistance) {
 				GetComponent<Animator> ().Play ("walk");
 				agent.SetDestination (target.position);
+				agent.Resume ();
 			} else {
 				agent.Stop ();
 				//Debug.Log ("attacking");

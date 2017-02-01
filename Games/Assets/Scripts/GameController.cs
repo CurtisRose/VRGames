@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
 	public static bool leftHandMovement = true;
 	private Spawnpoint[] spawnpoints;
 	private SteamVR_ControllerManager controllerManager;
+	public bool startGame = false;
 
 	public static GameController GetInstance() {
 		if (instance == null) {
@@ -32,6 +33,7 @@ public class GameController : MonoBehaviour {
 		
 	// Use this for initialization
 	void Start () {
+		RenderSettings.fog = false;
 		//Debug.Log ("Starting Game");
 		// Make full screen
 		Screen.fullScreen = true;
@@ -60,9 +62,11 @@ public class GameController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (numZombies <= 0) {
-			//Debug.Log ("Starting Level...");
-			NewLevel ();
+		if (startGame) {
+			if (numZombies <= 0) {
+				//Debug.Log ("Starting Level...");
+				NewLevel ();
+			}
 		}
 	}
 
