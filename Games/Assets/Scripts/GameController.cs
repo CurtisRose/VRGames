@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	public static int levelNumber = 0;
 	static GameController instance;
 	public int numSpawnpoints;
-	private int spawnTime = 5;
+	private int spawnTime = 20;
 	private PlayerController playerController;
 	private static int playerScore;
 	private static int zombiePoints = 100;
@@ -16,7 +16,12 @@ public class GameController : MonoBehaviour {
 	private static int zombieHealth = 100;
 	private static bool gameOver = false;
 	private static int playerHealth;
-
+	public static WandController leftController;
+	public static WandController rightController;
+	public static WandController movementController;
+	public static bool leftHandMovement = true;
+	private Spawnpoint[] spawnpoints;
+	private SteamVR_ControllerManager controllerManager;
 
 	public static GameController GetInstance() {
 		if (instance == null) {
@@ -24,8 +29,7 @@ public class GameController : MonoBehaviour {
 		}
 		return instance;
 	}
-
-	private Spawnpoint[] spawnpoints;
+		
 	// Use this for initialization
 	void Start () {
 		//Debug.Log ("Starting Game");
@@ -36,6 +40,16 @@ public class GameController : MonoBehaviour {
 		spawnpoints = GetComponentsInChildren<Spawnpoint> ();
 		numSpawnpoints = spawnpoints.Length;
 		//playerController = PlayerController.GetInstance ();
+		controllerManager = GetComponentInChildren<SteamVR_ControllerManager>();
+		if (controllerManager.left) {
+			leftController = controllerManager.left.GetComponent<WandController> ();
+		}
+		if (controllerManager.right) {
+			rightController = controllerManager.right.GetComponent<WandController> ();
+		}
+		if (leftController) {
+			movementController = leftController;
+		}
 	}
 
 	public void KillZombie() {
@@ -62,11 +76,19 @@ public class GameController : MonoBehaviour {
 		numZombiesLevel = numSpawnpoints + numZombiesLevel;
 		foreach (Spawnpoint point in spawnpoints) {
 			point.target = GetComponentInChildren<PlayerController> ().transform.GetChild (0).GetChild (2).transform;
-			//point.target = GameObject.FindWithTag("Player").transform;
 			point.PrepareSpawning (levelNumber, spawnTime, zombieHealth);
 		}
 		spawnTime -= 1;
-		zombieHealth += 10;
+		zombieHealth += 30;
+	}
+
+	public static void SwitchHandMovement() {
+		leftHandMovement = !leftHandMovement;
+		if (leftHandMovement) {
+			movementController = leftController;
+		} else {
+			movementController = rightController;
+		}
 	}
 
 	public static void EndGame() {

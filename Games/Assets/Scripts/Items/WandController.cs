@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WandController : MonoBehaviour {
 	private SteamVR_TrackedObject trackedObj;
-	private SteamVR_Controller.Device controller {
+	public SteamVR_Controller.Device controller {
 		get { return SteamVR_Controller.Input ((int)trackedObj.index); }
 	}
 	public Vector3 GetVelocity { get { return controller.velocity; } }
@@ -21,6 +21,10 @@ public class WandController : MonoBehaviour {
 
 	private PlayerController playerController;
 
+	private GameController gameController;
+
+	public bool isReady = false;
+
 	// Sketchy hack, originally used for magazines.
 	// When you load a magazine it makes sure your colliding object isn't immediately the gun.
 	public bool doNotSetCollidingObject = false;
@@ -28,11 +32,13 @@ public class WandController : MonoBehaviour {
 	void Awake() {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
 		controllerScript = gameObject.GetComponent<WandController> () as WandController;
+		gameController = GameController.GetInstance ();
 	}
 
 	void Start() {
 		controllerNumber = controller.index;
 		playerController = GetComponentInParent<PlayerController> ();
+		isReady = true;
 	}
 
 	// Sets up other collider as potential grab target.
@@ -82,6 +88,10 @@ public class WandController : MonoBehaviour {
 				collidingObject = null;
 			}
 		}
+	}
+
+	public bool IsAvailable() {
+		return GetObjectInHand ();
 	}
 
 	public void SetCollidingObject(GameObject gameObject) {
@@ -145,17 +155,10 @@ public class WandController : MonoBehaviour {
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				secondaryHoldObjectScript.OnGripDown (controllerScript);
 			}
-		} else {
-			if (controller.GetPress (SteamVR_Controller.ButtonMask.Touchpad)) {
-				//Debug.Log (controller.GetAxis ());
-				playerController.MovePlayer (controller.GetAxis (), transform.rotation.eulerAngles);
-			}
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
-			Debug.Log ("Controller: " + controllerNumber);
-		}
-		if (controller.GetPressDown(SteamVR_Controller.ButtonMask.System)) {
-			Debug.Log("Button Pressed");
+			//Debug.Log ("Controller: " + controllerNumber);
+			GameController.SwitchHandMovement ();
 		}
 	}
 

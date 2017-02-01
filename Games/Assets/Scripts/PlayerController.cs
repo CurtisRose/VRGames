@@ -4,11 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-	float playerSpeed = 0.05f;
 	public int health = 100;
 	private int fullHealth = 100;
 	AudioSource[] playerSounds;
 	PlayerController instance;
+
+	public float maxWalkSpeed = 3f;
+	public float deceleration = 0.1f;
+	private float movementSpeed = 0f;
+	private float strafeSpeed = 0f;
+	private float runningMultiplier = 1.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -16,18 +21,63 @@ public class PlayerController : MonoBehaviour {
 		GameController.SetPlayerHealth (health);
 	}
 
-	public void MovePlayer (Vector2 direction, Vector3 controllerRotation) {
-		//Debug.Log ("Moving Player");
-		//MoveHorizontal (direction.x * Vector3.Project(controllerRotation, Vector3.up).y);
-		//MoveVertical (direction.y * Vector3.Project(controllerRotation, Vector3.up).y);
+	private void CalculateSpeed(ref float speed, float inputValue) {
+		//Debug.Log ("Calculating Speed");
+		if (inputValue != 0f)
+		{
+			speed = (maxWalkSpeed * inputValue);
+		}
+		else
+		{
+			Decelerate(ref speed);
+		}
 	}
 
-	private void MoveVertical(float value) {
-		transform.position += transform.right * value * playerSpeed;
+	private void Decelerate(ref float speed) {
+		//Debug.Log ("Decelerating");
+		if (speed > 0)
+		{
+			speed -= Mathf.Lerp(deceleration, maxWalkSpeed, 0f);
+		}
+		else if (speed < 0)
+		{
+			speed += Mathf.Lerp(deceleration, -maxWalkSpeed, 0f);
+		}
+		else
+		{
+			speed = 0;
+		}
+
+		float deadzone = 0.1f;
+		if (speed < deadzone && speed > -deadzone)
+		{
+			speed = 0;
+		}
 	}
 
-	private void MoveHorizontal(float value) {
-		transform.position -=  transform.forward * value * playerSpeed;
+	public void Move() {
+		//Debug.Log ("Moving");
+		Vector3 movement;
+		Vector3 strafe;
+		float tempRunningMultiplier = 1f;
+		if (GameController.movementController.controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
+			tempRunningMultiplier = runningMultiplier;
+		}
+
+		movement = GameController.movementController.transform.forward * movementSpeed * tempRunningMultiplier * Time.deltaTime;
+		strafe = GameController.movementController.transform.right * strafeSpeed * tempRunningMultiplier * Time.deltaTime;
+
+		float fixY = transform.position.y;
+		transform.position += (movement + strafe);
+		transform.position = new Vector3 (transform.position.x, fixY, transform.position.z);
+	}
+
+	private void FixedUpdate() {
+		if (GameController.movementController.isReady) {
+			CalculateSpeed (ref movementSpeed, GameController.movementController.controller.GetAxis().y);
+			CalculateSpeed (ref strafeSpeed, GameController.movementController.controller.GetAxis().x);
+			Move ();
+		}
 	}
 
 	public void DoDamage(int damage) {
