@@ -45,6 +45,7 @@ public class GameController : MonoBehaviour {
 		controllerManager = GetComponentInChildren<SteamVR_ControllerManager>();
 		if (controllerManager.left) {
 			leftController = controllerManager.left.GetComponent<WandController> ();
+			controllerManager.left.GetComponent<WandController> ().isLeftcontroller = true;
 		}
 		if (controllerManager.right) {
 			rightController = controllerManager.right.GetComponent<WandController> ();

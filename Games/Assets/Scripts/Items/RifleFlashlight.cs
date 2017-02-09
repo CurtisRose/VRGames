@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RifleFlashlight : Attachment {
-	Light light;
+	Light flashlight;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -11,14 +11,14 @@ public class RifleFlashlight : Attachment {
 		base.Start ();
 		attachmentPosition = new Vector3 (0.0f, 23.0f ,-4.0f);
 		attachmentType = "Other";
-		light = GetComponentInChildren<Light> ();
+		flashlight = GetComponentInChildren<Light> ();
 	}
 
 	void TurnFlashlightOn () {
-		if (!light.enabled) {
-			light.enabled = true;
+		if (!flashlight.enabled) {
+			flashlight.enabled = true;
 		} else {
-			light.enabled = false;
+			flashlight.enabled = false;
 			
 		}
 	}

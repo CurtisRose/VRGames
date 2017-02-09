@@ -8,10 +8,18 @@ public class Magazine : Item {
 	public bool attached = false;
 	public Weapon attachedWeapon;
 	public string gunName;
+	private bool touchingMagazinePouch = false;
+	private bool isHolstered = false;
+	public Vector3 holsterPosition = Vector3.zero;
+	public Quaternion holsterRotation = Quaternion.Euler(Vector3.zero);
+	public MagazinePouch magazinePouch;
+	public Collider magCollider;
 
 	protected override void Start() {
 		base.Start();
 		numBullets = 30;
+		holsterPosition = new Vector3 (0.0f, -0.0384f, 0.009f);
+		holsterRotation = Quaternion.Euler (new Vector3 (90, 0, 0));
 	}
 
 	void OnTriggerEnter(Collider col) {
@@ -95,6 +103,44 @@ public class Magazine : Item {
 		if (attached) {
 			Unattach (attachedWeapon);
 		}
-		base.PickUp (controller);
+		//Debug.Log (GetTouchingMagazinePouch ());
+		//Debug.Log (!GetIsHolstered ());
+		//Debug.Log (GetIsHeld ());
+		if (GetTouchingMagazinePouch() && !GetIsHolstered () && GetIsHeld ()) {
+			//Debug.Log ("Holstering magazine");
+			PickUp (controller);
+			SetIsHolstered (true);
+			if (!magazinePouch.AddMagazine (this)) {
+				//Debug.Log ("Trying to repick up magazine");
+				SetIsHolstered (false);
+				PickUp (controller);
+			}
+		} else if (GetIsHolstered ()) {
+			//Debug.Log ("Unholstering magazine");
+			magazinePouch.RemoveMagazine (this);
+			SetTouchingMagazinePouch (false, null);
+			SetIsHolstered (false);
+			PickUp (controller);
+		} 	else {
+			//Debug.Log ("Doing something else with magazine");
+			PickUp (controller);
+		}
+	}
+
+	public bool GetTouchingMagazinePouch() {
+		return touchingMagazinePouch;
+	}
+
+	public void SetTouchingMagazinePouch(bool setTouching, MagazinePouch pouch) {
+		magazinePouch = pouch;
+		touchingMagazinePouch = setTouching;
+	}
+
+	public bool GetIsHolstered() {
+		return isHolstered;
+	}
+
+	public void SetIsHolstered(bool setHolstered) {
+		isHolstered = setHolstered;
 	}
 }

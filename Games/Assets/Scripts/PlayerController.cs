@@ -23,13 +23,15 @@ public class PlayerController : MonoBehaviour {
 		playerSounds = GetComponents<AudioSource> ();
 		GameController.SetPlayerHealth (health);
 		characterController = GetComponentInChildren<CharacterController> ();
-		Collider[] colliders = zombie.GetComponentsInChildren<Collider> ();
+		// This wasn't working for some reason. Should probably have the zombies ignore the player colliders when they spawn.
+		/*Collider[] colliders = zombie.GetComponentsInChildren<Collider> ();
 		foreach (Collider collider in colliders) {
 			//Debug.Log ("Test");
 			Physics.IgnoreCollision (characterController.GetComponent<Collider> (), collider);
 		}
 		//Debug.Log (characterController.GetComponent<Collider> ().gameObject.name);
 		Physics.IgnoreCollision (characterController.GetComponent<Collider> (), zombie.GetComponent<Collider>());
+		*/
 	}
 
 	private void CalculateSpeed(ref float speed, float inputValue) {
@@ -91,10 +93,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		if (GameController.movementController.isReady) {
-			CalculateSpeed (ref movementSpeed, GameController.movementController.controller.GetAxis().y);
-			CalculateSpeed (ref strafeSpeed, GameController.movementController.controller.GetAxis().x);
-			Move ();
+		if (GameController.movementController) {
+			if (GameController.movementController.isReady) {
+				CalculateSpeed (ref movementSpeed, GameController.movementController.controller.GetAxis ().y);
+				CalculateSpeed (ref strafeSpeed, GameController.movementController.controller.GetAxis ().x);
+				Move ();
+			}
 		}
 	}
 

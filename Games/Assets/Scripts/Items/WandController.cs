@@ -25,13 +25,15 @@ public class WandController : MonoBehaviour {
 
 	public bool isReady = false;
 
+	public bool isLeftcontroller = false;
+
 	// Sketchy hack, originally used for magazines.
 	// When you load a magazine it makes sure your colliding object isn't immediately the gun.
 	public bool doNotSetCollidingObject = false;
 
 	void Awake() {
 		trackedObj = GetComponent<SteamVR_TrackedObject> ();
-		controllerScript = gameObject.GetComponent<WandController> () as WandController;
+		controllerScript = gameObject.GetComponent<WandController> ();
 		gameController = GameController.GetInstance ();
 	}
 

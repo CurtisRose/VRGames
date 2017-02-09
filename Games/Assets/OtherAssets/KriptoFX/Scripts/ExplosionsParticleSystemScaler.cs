@@ -28,10 +28,11 @@ public class ExplosionsParticleSystemScaler : MonoBehaviour
 			
 			foreach (ParticleSystem particles in ps)
 			{
-				particles.startSize *= scale;
-				particles.startSpeed *= scale;
-				particles.gravityModifier *= scale;
-				
+				ParticleSystem.MainModule main = particles.main;
+				main.startSizeMultiplier = scale;
+				main.startSpeedMultiplier = scale;
+				main.gravityModifierMultiplier = scale;
+
 				SerializedObject serializedObject = new SerializedObject(particles);
 				serializedObject.FindProperty("ClampVelocityModule.magnitude.scalar").floatValue *= scale;
 				serializedObject.FindProperty("ClampVelocityModule.x.scalar").floatValue *= scale;
