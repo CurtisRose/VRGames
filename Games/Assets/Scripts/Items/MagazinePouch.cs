@@ -8,25 +8,34 @@ public class MagazinePouch : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col) {
 		//Debug.Log ("Something touched magazinePouch");
-		if (col.GetComponent<Magazine>()) {
-			Highlight (true);
-			col.GetComponent<Magazine> ().SetTouchingMagazinePouch (true, this);
+		if (col.GetComponent<Magazine> ()) {
+			if (!col.GetComponent<Magazine> ().magazinePouch) {
+				//Debug.Log ("Magazine began touching magazinePouch");
+				Highlight (true);
+				col.GetComponent<Magazine> ().SetTouchingMagazinePouch (true, this);
+			}
 		}
 	}
 
 	void OnTriggerStay(Collider col) {
 		//Debug.Log ("Something is still touching magazinePouch");
 		if (col.GetComponent<Magazine>()) {
-			Highlight (true);
-			col.GetComponent<Magazine> ().SetTouchingMagazinePouch (true, this);
+			if (!col.GetComponent<Magazine> ().magazinePouch) {
+				//Debug.Log ("Magazine is still touching magazinePouch");
+				Highlight (true);
+				col.GetComponent<Magazine> ().SetTouchingMagazinePouch (true, this);
+			}
 		}
 	}
 
 	void OnTriggerExit(Collider col) {
 		//Debug.Log ("Something stopped touching magazinePouch");
 		if (col.GetComponent<Magazine>()) {
-			Highlight (false);
-			col.GetComponent<Magazine> ().SetTouchingMagazinePouch (false, this);
+			if (col.GetComponent<Magazine> ().magazinePouch == this) {
+				//Debug.Log ("Magazine stopped touching magazinePouch");
+				Highlight (false);
+				col.GetComponent<Magazine> ().SetTouchingMagazinePouch (false, null);
+			}
 		}
 	}
 
