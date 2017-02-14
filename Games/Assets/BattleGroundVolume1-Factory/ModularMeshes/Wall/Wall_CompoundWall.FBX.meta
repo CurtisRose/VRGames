@@ -1,0 +1,203 @@
+fileFormatVersion: 2
+guid: a2f1ea9e285de6b46ad836e5e481c45c
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Gasson_Center
+    100002: Gasson_Corner
+    100004: Gasson_Side
+    100006: Ground_A
+    100008: Ground_B
+    100010: Ground_BetonA
+    100012: Ground_BetonB
+    100014: Ground_BetonC
+    100016: Ground_BetonC 1
+    100018: Ground_BetonPitCenter
+    100020: Ground_BetonPitEnd
+    100022: Ground_BigWall
+    100024: Ground_C
+    100026: Ground_Corner
+    100028: Ground_SmallWall
+    100030: //RootNode
+    100032: Wall_CompoundWall
+    100034: Wall_MetalConstruction
+    100036: Wall_MetalCover
+    100038: Wall_MetalFance
+    100040: Wall_MetalStairs
+    100042: Wall_Planks
+    100044: Wall_TinyTube
+    100046: Wall_TinyTubeCorner
+    100048: Wall_WaterTube
+    100050: Wall_WaterTubeCorner
+    400000: Gasson_Center
+    400002: Gasson_Corner
+    400004: Gasson_Side
+    400006: Ground_A
+    400008: Ground_B
+    400010: Ground_BetonA
+    400012: Ground_BetonB
+    400014: Ground_BetonC
+    400016: Ground_BetonC 1
+    400018: Ground_BetonPitCenter
+    400020: Ground_BetonPitEnd
+    400022: Ground_BigWall
+    400024: Ground_C
+    400026: Ground_Corner
+    400028: Ground_SmallWall
+    400030: Wall_CompoundWall
+    400032: //RootNode
+    400034: Wall_MetalConstruction
+    400036: Wall_MetalCover
+    400038: Wall_MetalFance
+    400040: Wall_MetalStairs
+    400042: Wall_Planks
+    400044: Wall_TinyTube
+    400046: Wall_TinyTubeCorner
+    400048: Wall_WaterTube
+    400050: Wall_WaterTubeCorner
+    2300000: Gasson_Center
+    2300002: Gasson_Corner
+    2300004: Gasson_Side
+    2300006: Ground_A
+    2300008: Ground_B
+    2300010: Ground_BetonA
+    2300012: Ground_BetonB
+    2300014: Ground_BetonC
+    2300016: Ground_BetonC 1
+    2300018: Ground_BetonPitCenter
+    2300020: Ground_BetonPitEnd
+    2300022: Ground_BigWall
+    2300024: Ground_C
+    2300026: Ground_Corner
+    2300028: Ground_SmallWall
+    2300030: Wall_CompoundWall
+    2300032: Wall_MetalConstruction
+    2300034: Wall_MetalCover
+    2300036: Wall_MetalFance
+    2300038: Wall_MetalStairs
+    2300040: Wall_Planks
+    2300042: Wall_TinyTube
+    2300044: Wall_TinyTubeCorner
+    2300046: Wall_WaterTube
+    2300048: Wall_WaterTubeCorner
+    2300050: //RootNode
+    3300000: Gasson_Center
+    3300002: Gasson_Corner
+    3300004: Gasson_Side
+    3300006: Ground_A
+    3300008: Ground_B
+    3300010: Ground_BetonA
+    3300012: Ground_BetonB
+    3300014: Ground_BetonC
+    3300016: Ground_BetonC 1
+    3300018: Ground_BetonPitCenter
+    3300020: Ground_BetonPitEnd
+    3300022: Ground_BigWall
+    3300024: Ground_C
+    3300026: Ground_Corner
+    3300028: Ground_SmallWall
+    3300030: Wall_CompoundWall
+    3300032: Wall_MetalConstruction
+    3300034: Wall_MetalCover
+    3300036: Wall_MetalFance
+    3300038: Wall_MetalStairs
+    3300040: Wall_Planks
+    3300042: Wall_TinyTube
+    3300044: Wall_TinyTubeCorner
+    3300046: Wall_WaterTube
+    3300048: Wall_WaterTubeCorner
+    3300050: //RootNode
+    4300000: Gasson_Side
+    4300002: Gasson_Center
+    4300004: Gasson_Corner
+    4300006: Ground_A
+    4300008: Ground_B
+    4300010: Ground_C
+    4300012: Ground_BetonA
+    4300014: Ground_BetonPitCenter
+    4300016: Ground_BetonB
+    4300018: Ground_BigWall
+    4300020: Ground_BetonPitEnd
+    4300022: Ground_Corner
+    4300024: Ground_SmallWall
+    4300026: Ground_BetonC
+    4300028: Wall_MetalConstruction
+    4300030: Wall_Planks
+    4300032: Wall_MetalStairs
+    4300034: Wall_MetalFance
+    4300036: Wall_MetalCover
+    4300038: Wall_TinyTubeCorner
+    4300040: Wall_TinyTube
+    4300042: Wall_WaterTube
+    4300044: Wall_WaterTubeCorner
+    4300046: Wall_CompoundWall
+    4300048: Ground_BetonC
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
