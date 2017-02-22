@@ -13,7 +13,7 @@ public class ZombieController : MonoBehaviour {
 	int damage = 10;
 	float attackDistance = 2.0f;
 	float time;
-	float attackSpeed = 2.0f;
+	float attackSpeed = 1.5f;
 	NavMeshPath path = null;
 	public GameObject targetGameObject = null;
 	public GameObject player = null;
@@ -52,63 +52,42 @@ public class ZombieController : MonoBehaviour {
 			//Debug.Log ("Remaining Distance: " + Mathf.Abs((agent.transform.position - target.transform.position).magnitude));
 			Vector3 pathLocation = player.transform.position;
 			agent.SetDestination (pathLocation);
-			Debug.Log (agent.pathEndPosition == pathLocation);
-			Debug.Log (agent.pathEndPosition);
-			Debug.Log (pathLocation);
-			if (agent.pathEndPosition != pathLocation) {
-				//Debug.Log ("Player is not viable target");
-				if (targetGameObject) {
-					//Debug.Log ("Continue to obstacle");
-					pathLocation = targetGameObject.transform.position;
-					agent.SetDestination (pathLocation);
-				} else {
-					//Debug.Log ("Find new target obstacle");
-				}
-			} else {
-				//Debug.Log ("Player is viable target");
-			}
-			if (agent.pathEndPosition == pathLocation) {
-				Debug.Log ("Continuing on path");
+			//Debug.Log ("====================");
+			if ((agent.pathEndPosition.magnitude - pathLocation.magnitude) < attackDistance && agent.CalculatePath (pathLocation, path)) {
+				//Debug.Log ("Following path to player");
 				if (Mathf.Abs ((agent.transform.position - pathLocation).magnitude) > attackDistance) {
-					Debug.Log ("Walking");
-					GetComponent<Animator> ().Play ("walk");
-					agent.SetDestination (pathLocation);
-					agent.Resume ();
+					bool attacking = false;
+					foreach (Obstacle obstacle in GameObject.FindObjectsOfType<Obstacle>()) {
+						if (Mathf.Abs ((transform.position - obstacle.transform.position).magnitude) < attackDistance) {
+							attacking = true;
+							agent.Stop ();
+							Debug.Log ("Attacking Obstacle");
+							GetComponent<Animator> ().Play ("attack");
+							if (Time.realtimeSinceStartup - time > attackSpeed) {
+								time = Time.realtimeSinceStartup;
+								//Debug.Log ("Doing Damage to Obstacle");
+								obstacle.GetComponent<Obstacle> ().Damage (damage);
+							}
+						}
+					}
+					if (!attacking) {
+						//Debug.Log ("Walking");
+						GetComponent<Animator> ().Play ("walk");
+						agent.SetDestination (pathLocation);
+						agent.Resume ();
+					}
 				} else {
 					agent.Stop ();
-					Debug.Log ("Attacking");
+					//Debug.Log ("Attacking Player");
 					GetComponent<Animator> ().Play ("attack");
 					if (Time.realtimeSinceStartup - time > attackSpeed) {
 						time = Time.realtimeSinceStartup;
-						//Debug.Log ("Doing Damage");
-						if (targetGameObject) {
-							targetGameObject.GetComponentInParent<Obstacle> ().Dagmage (damage);
-						} else {
-							target.gameObject.GetComponentInParent<PlayerController> ().DoDamage (damage);
-						}
+						//Debug.Log ("Doing Damage to Player");
+						target.gameObject.GetComponentInParent<PlayerController> ().DoDamage (damage);
 					}
 				}
 			} else {
-				Debug.Log ("Calculating new obstacle target");
-				float pathLength = -1;
-				Obstacle finalObstacle = null;
-				foreach (Obstacle obstacle in Object.FindObjectsOfType<Obstacle> ()) {
-					agent.SetDestination (obstacle.transform.position);
-					float temp = 0;
-					foreach (Vector3 corner in agent.path.corners) {
-						temp += corner.magnitude;
-					}
-					if (pathLength == -1 || pathLength > temp) {
-						pathLength = temp;
-						finalObstacle = obstacle;
-					}
-				}
-				if (finalObstacle) {
-					targetGameObject = finalObstacle.gameObject;
-					agent.SetDestination (targetGameObject.transform.position);
-				} else {
-					agent.Stop ();
-				}
+				//Debug.Log ("No Path to Player was found");
 			}
 		} else {
 			Destroy (agent);
