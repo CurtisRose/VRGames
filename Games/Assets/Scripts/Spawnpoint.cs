@@ -24,6 +24,7 @@ public class Spawnpoint : MonoBehaviour {
 			transform.position,
 			transform.rotation);
 		zombie.GetComponent<ZombieController> ().target = target;
+		zombie.GetComponent<ZombieController> ().player = target.gameObject;
 		zombie.GetComponent<ZombieController> ().SetHealth (zombieHealth);
 	}
 

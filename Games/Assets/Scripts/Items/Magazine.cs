@@ -8,18 +8,16 @@ public class Magazine : Item {
 	public bool attached = false;
 	public Weapon attachedWeapon;
 	public string gunName;
-	private bool touchingMagazinePouch = false;
-	private bool isHolstered = false;
+	protected bool touchingMagazinePouch = false;
+	protected bool isHolstered = false;
 	public Vector3 holsterPosition = Vector3.zero;
 	public Quaternion holsterRotation = Quaternion.Euler(Vector3.zero);
 	public MagazinePouch magazinePouch;
 	public Collider magCollider;
+	public Weapon weaponToAttach;
 
 	protected override void Start() {
 		base.Start();
-		numBullets = 30;
-		holsterPosition = new Vector3 (0.0f, -0.0384f, 0.009f);
-		holsterRotation = Quaternion.Euler (new Vector3 (90, 0, 0));
 	}
 
 	void OnTriggerEnter(Collider col) {
@@ -30,7 +28,9 @@ public class Magazine : Item {
 					if (!col.gameObject.GetComponentInChildren<Weapon> ().hasMagazine) {
 						//Debug.Log ("Testing magazine collision enter");
 						if (col.gameObject.GetComponentInChildren<Weapon> ().gunName == gunName) {
-							Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+							//Attach (col.gameObject.GetComponentInChildren<Weapon> ());
+							weaponToAttach = col.gameObject.GetComponentInChildren<Weapon> ();
+							col.gameObject.GetComponentInChildren<Weapon> ().Highlight (true);
 						}
 					}
 				}
@@ -38,19 +38,18 @@ public class Magazine : Item {
 		}
 	}
 
-	void OnTriggerStay(Collider col) {
+	/*void OnTriggerStay(Collider col) {
 		if (col.gameObject.GetComponent<WandController> ()) {
 			col.gameObject.GetComponent<WandController> ().SetCollidingObject (gameObject);
 		}
-	}
+	}*/
 
 	void OnTriggerExit(Collider col) {
 		if (col.gameObject.GetComponentInChildren<Weapon>()) {
 			if (isHeld) {
-				if (attached) {
-					attached = false;
-					transform.parent = holdingController.transform;
-					attachedWeapon = null;
+				col.gameObject.GetComponentInChildren<Weapon> ().Highlight (false);
+				if (weaponToAttach == col.gameObject.GetComponentInChildren<Weapon> ()) {
+					weaponToAttach = null;
 				}
 			}
 		}
@@ -65,48 +64,24 @@ public class Magazine : Item {
 		holdingController.SetCollidingObject (null);
 		holdingController = null;
 		SetIsHeld (false);
+		weapon.Highlight (false);
 	}
 
-	void Unattach(Weapon weapon) {
+	public virtual void Unattach(Weapon weapon) {
+		//Debug.Log ("Unattaching magazine");
 		weapon.Unload (gameObject.GetComponent<Magazine>());
-		// If there are less than 6 bullets then check how many, then Destroy the correct bullets in the magzine.
-		/*if (numBullets < 6) {
-			if (numBullets == 5) {
-				if (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
-					Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
-				}
-			} else if (numBullets == 4) {
-				if (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
-					Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
-				}
-			} else if (numBullets == 3) {
-				if (transform.GetChild (0).GetChild (0).GetChild (0).childCount > 0) {
-					Destroy (transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).gameObject);
-				}
-			} else if (numBullets == 2) {
-				if (transform.GetChild (0).GetChild (0).childCount > 0) {
-					Destroy (transform.GetChild (0).GetChild (0).GetChild (0).gameObject);
-				}
-			} else if (numBullets == 1) {
-				if (transform.GetChild (0).childCount > 0) {
-					Destroy (transform.GetChild (0).GetChild (0).gameObject);
-				}
-			} else if (numBullets == 0) {
-				if (transform.childCount > 0) {
-					Destroy (transform.GetChild (0).gameObject);
-				}
-			} 
-		}*/
+		weaponToAttach = null;
+		weapon.Highlight (false);
+		attached = false;
 	}
 
 	public override void OnGripDown(WandController controller) {
 		if (attached) {
 			Unattach (attachedWeapon);
-		}
-		//Debug.Log (GetTouchingMagazinePouch ());
-		//Debug.Log (!GetIsHolstered ());
-		//Debug.Log (GetIsHeld ());
-		if (GetTouchingMagazinePouch() && !GetIsHolstered () && GetIsHeld ()) {
+			PickUp (controller);
+		} else if (weaponToAttach) {
+			Attach (weaponToAttach);
+		} else if (GetTouchingMagazinePouch() && !GetIsHolstered () && GetIsHeld ()) {
 			//Debug.Log ("Holstering magazine");
 			PickUp (controller);
 			SetIsHolstered (true);
@@ -122,8 +97,13 @@ public class Magazine : Item {
 			SetIsHolstered (false);
 			PickUp (controller);
 		} 	else {
-			//Debug.Log ("Doing something else with magazine");
-			PickUp (controller);
+			if (isHeld) {
+				//Debug.Log ("Dropping Magazine");
+				PickUp (controller);
+			} else {
+				//Debug.Log ("Picking up magazine");
+				PickUp (controller);
+			}
 		}
 	}
 

@@ -160,7 +160,7 @@ public class M1A1Controller : Weapon {
 		PickUp(controller);
 	}
 
-	public override void OnTouchpadDown(WandController controller) {
+	public override void OnTouchpadDown(WandController controller, Vector2 touchPosition) {
 		//Debug.Log ("Touchpad Pressed");
 		if (controller.GetObjectInHand() == gameObject) {
 			gunSounds [3].Play ();

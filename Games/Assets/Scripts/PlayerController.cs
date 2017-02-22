@@ -80,8 +80,8 @@ public class PlayerController : MonoBehaviour {
 		//Debug.Log ("1 " + GameController.movementController.transform.forward);
 		//Debug.Log ("2 " + movementSpeed);
 		//Debug.Log ("3 " + tempRunningMultiplier);
-		movement = GameController.movementController.transform.forward * movementSpeed * tempRunningMultiplier;// * Time.deltaTime;
-		strafe = GameController.movementController.transform.right * strafeSpeed * tempRunningMultiplier;// * Time.deltaTime;
+		movement = Vector3.ProjectOnPlane(GameController.movementController.transform.forward, Vector3.up).normalized * movementSpeed * tempRunningMultiplier;// * Time.deltaTime;
+		strafe = Vector3.ProjectOnPlane(GameController.movementController.transform.right, Vector3.up).normalized * strafeSpeed * tempRunningMultiplier;// * Time.deltaTime;
 		//Debug.Log ("Movement = " + movement);
 		//Debug.Log ("Strafe = " + strafe);
 		float fixY = transform.position.y;

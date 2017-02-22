@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	public static int levelNumber = 0;
 	static GameController instance;
 	public int numSpawnpoints;
-	private int spawnTime = 20;
+	public int spawnTime = 20;
 	private PlayerController playerController;
 	private static int playerScore;
 	private static int zombiePoints = 100;

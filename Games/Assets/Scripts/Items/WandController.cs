@@ -60,18 +60,19 @@ public class WandController : MonoBehaviour {
 
 	// Makes sure that the target is still set.
 	public void OnTriggerStay(Collider other) {
-		if (other.transform.GetComponent<Magazine> ()) {
-			if (!objectInHand && !secondaryHoldObject) {
-				if (collidingObject) {
-					collidingObject.GetComponent<Item> ().Highlight (false);
+		if (other.transform.GetComponent<Item> ()) {
+			if (collidingObject && !objectInHand && !secondaryHoldObject) {
+				if (collidingObject.GetComponent<Weapon> ()) {
+					if (collidingObject.GetComponent<Weapon> ().GetIsHeld()) {
+						if (other.GetComponent<Magazine> ()) {
+							collidingObject.GetComponent<Item> ().Highlight (true);
+							SetCollidingObject (other.gameObject);
+						}
+					}
 				}
-				SetCollidingObject (other.gameObject);
-			}
-		} else if (other.transform.GetComponent<Item> ()) {
-			if (!collidingObject && !objectInHand && !secondaryHoldObject) {
-				SetCollidingObject (other.gameObject);
-			} else if (collidingObject && !objectInHand && !secondaryHoldObject) {
 				collidingObject.GetComponent<Item>().Highlight(true);
+			}else if (!collidingObject && !objectInHand && !secondaryHoldObject) {
+				SetCollidingObject (other.gameObject);
 			}
 		}
 	}
@@ -102,6 +103,11 @@ public class WandController : MonoBehaviour {
 				Item itemScript = gameObject.transform.GetComponent (typeof(Item)) as Item;
 				itemScript.Highlight (true);
 				itemScript.collidingController = this;
+				if (collidingObject) {
+					if (collidingObject.GetComponent<Item> ()) {
+						collidingObject.GetComponent<Item> ().Highlight (false);
+					}
+				}
 				collidingObject = gameObject;
 			}
 		} else {
@@ -137,7 +143,10 @@ public class WandController : MonoBehaviour {
 				objectInHandScript.OnTriggerUp (controllerScript);
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
-				objectInHandScript.OnTouchpadDown (controllerScript);
+				objectInHandScript.OnTouchpadDown (controllerScript, controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad));
+			}
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
+				objectInHandScript.OnMenuDown (controllerScript);
 			}
 		}
 		else if (collidingObject) {

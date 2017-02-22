@@ -50,7 +50,7 @@ public class Holster : MonoBehaviour {
 	}
 
 	public bool HolsterWeapon(Weapon weapon, bool isLeft) {
-		Debug.Log ("Holstering weapon");
+		//Debug.Log ("Holstering weapon");
 		weapon.transform.parent = transform;
 		//weapon.transform.localPosition = weapon.holsterPosition;
 		weapon.transform.localRotation = transform.rotation;
@@ -59,7 +59,7 @@ public class Holster : MonoBehaviour {
 		Destroy (weapon.GetComponent<Rigidbody> ());
 		if (weapon.GetIsPrimaryWeapon ()) {
 			if (!primaryWeapon) {
-				Debug.Log ("Holstering primary weapon");
+				//Debug.Log ("Holstering primary weapon");
 				weapon.SetIsHolstered (true);
 				primaryWeapon = weapon;
 				if (isLeft) {
@@ -71,22 +71,24 @@ public class Holster : MonoBehaviour {
 				}
 				return true;
 			} else {
-				Debug.Log ("No room for another primary weapon.");
+				//Debug.Log ("No room for another primary weapon.");
 				return false;
 			}
 		} else {
 			if (!secondaryWeapon) {
-				Debug.Log ("Holstering secondary weapon");
+				//Debug.Log ("Holstering secondary weapon");
 				weapon.SetIsHolstered (true);
-				primaryWeapon = weapon;
+				secondaryWeapon = weapon;
 				if (isLeft) {
+					weapon.transform.localRotation = Quaternion.Euler (new Vector3 (weapon.transform.localRotation.x + 45f, weapon.transform.localRotation.y + 45, weapon.transform.localRotation.z));
 					weapon.transform.localPosition = new Vector3 (-weapon.holsterPosition.x, weapon.holsterPosition.y, weapon.holsterPosition.z);
 				} else {
+					weapon.transform.localRotation = Quaternion.Euler (new Vector3 (weapon.transform.localRotation.x + 45f, weapon.transform.localRotation.y - 45, weapon.transform.localRotation.z));
 					weapon.transform.localPosition = new Vector3 (weapon.holsterPosition.x, weapon.holsterPosition.y, weapon.holsterPosition.z);
 				}
 				return true;
 			} else {
-				Debug.Log ("No room for another secondary weapon.");
+				//Debug.Log ("No room for another secondary weapon.");
 				return false;
 			}
 		}
