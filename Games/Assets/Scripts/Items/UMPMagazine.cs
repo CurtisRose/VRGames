@@ -10,6 +10,6 @@ public class UMPMagazine : Magazine {
 		numBullets = 30;
 		holsterPosition = new Vector3 (0.0f, -0.076f, 0.082f);
 		holsterRotation = Quaternion.Euler (new Vector3 (-90, 0, 0));
-		gunName = "M4A1";
+		gunName = "UMP";
 	}
 }

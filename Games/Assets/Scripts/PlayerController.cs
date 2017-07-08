@@ -23,15 +23,6 @@ public class PlayerController : MonoBehaviour {
 		playerSounds = GetComponents<AudioSource> ();
 		GameController.SetPlayerHealth (health);
 		characterController = GetComponentInChildren<CharacterController> ();
-		// This wasn't working for some reason. Should probably have the zombies ignore the player colliders when they spawn.
-		/*Collider[] colliders = zombie.GetComponentsInChildren<Collider> ();
-		foreach (Collider collider in colliders) {
-			//Debug.Log ("Test");
-			Physics.IgnoreCollision (characterController.GetComponent<Collider> (), collider);
-		}
-		//Debug.Log (characterController.GetComponent<Collider> ().gameObject.name);
-		Physics.IgnoreCollision (characterController.GetComponent<Collider> (), zombie.GetComponent<Collider>());
-		*/
 	}
 
 	private void CalculateSpeed(ref float speed, float inputValue) {
@@ -76,23 +67,20 @@ public class PlayerController : MonoBehaviour {
 		if (GameController.movementController.controller.GetPress(SteamVR_Controller.ButtonMask.Touchpad)) {
 			tempRunningMultiplier = runningMultiplier;
 		}
-
-		//Debug.Log ("1 " + GameController.movementController.transform.forward);
-		//Debug.Log ("2 " + movementSpeed);
-		//Debug.Log ("3 " + tempRunningMultiplier);
+			
 		movement = Vector3.ProjectOnPlane(GameController.movementController.transform.forward, Vector3.up).normalized * movementSpeed * tempRunningMultiplier;// * Time.deltaTime;
 		strafe = Vector3.ProjectOnPlane(GameController.movementController.transform.right, Vector3.up).normalized * strafeSpeed * tempRunningMultiplier;// * Time.deltaTime;
-		//Debug.Log ("Movement = " + movement);
-		//Debug.Log ("Strafe = " + strafe);
+
 		float fixY = transform.position.y;
 		Vector3 temp = movement + strafe;
-		//transform.position += (movement + strafe);
-		//transform.position = new Vector3 (transform.position.x, fixY, transform.position.z);
-		//Debug.Log(temp);
+
 		characterController.SimpleMove(temp);
 	}
 
 	private void FixedUpdate() {
+		Vector3 temp = characterController.transform.GetChild (3).transform.localPosition;
+		temp.y = characterController.center.y;
+		characterController.center = temp;
 		if (GameController.movementController) {
 			if (GameController.movementController.isReady) {
 				CalculateSpeed (ref movementSpeed, GameController.movementController.controller.GetAxis ().y);

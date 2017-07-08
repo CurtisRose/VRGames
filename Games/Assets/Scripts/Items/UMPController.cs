@@ -17,7 +17,7 @@ public class UMPController : Weapon {
 		gunSounds = GetComponents<AudioSource>();
 		hasMagazine = false;
 		hasGripPosition = true;
-		gunName = "M4A1";
+		gunName = "UMP";
 		holsterPosition = new Vector3 (.5f, 1f, 0);
 		primaryWeapon = true;
 		damage = 50;
