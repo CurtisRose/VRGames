@@ -7,7 +7,7 @@ public class Obstacle : Item {
 	private int maxHealth = 50;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		health = 50;
 	}
 	
@@ -21,12 +21,12 @@ public class Obstacle : Item {
 	}
 
 	public void Repair(int repairAmount) {
-		Debug.Log ("Repairing Obstacle");
+		//Debug.Log ("Repairing Obstacle");
 		if (health < maxHealth) {
 			health += repairAmount;
 		}
 		if (health > maxHealth) {
-			Debug.Log ("Obstacle at full health");
+			//Debug.Log ("Obstacle at full health");
 			health = maxHealth;
 		}
 	}

@@ -13,8 +13,8 @@ public abstract class Notifier : MonoBehaviour{
 	protected virtual void Start() {
 		this.id = NEXT_ID;
 		NEXT_ID++;
-		this.manager = NotificationManager.GetInstance();
-		this.manager.AddNotifier (this);
+		//this.manager = NotificationManager.GetInstance();
+		//this.manager.AddNotifier (this);
 	}
 
 	public abstract void decode (string message);
@@ -28,6 +28,6 @@ public abstract class Notifier : MonoBehaviour{
 	}
 
 	protected void notify(string message) {
-		manager.createNotification (message);
+		//manager.createNotification (message);
 	}
 }

@@ -150,11 +150,13 @@ public class Weapon : Item {
 		rightLockedDelta.ToAngleAxis(out rightLockedAngle, out rightLockedAxis);
 
 		if (rightLockedAngle > secondaryDropAngle) {
-			//Debug.Log ("Letting go with secondary controller");
-			otherController.secondaryHoldObject = null;
-			UnsetOtherController ();
-			gameObject.transform.rotation = holdingController.transform.rotation * gripRotation;
-			return;
+			if (rightLockedAngle < 350) {
+				//Debug.Log ("Letting go with secondary controller");
+				otherController.secondaryHoldObject = null;
+				UnsetOtherController ();
+				gameObject.transform.rotation = holdingController.transform.rotation * gripRotation;
+				return;
+			}
 		}
 
 		if (rightLockedAngle > 180f)
@@ -197,7 +199,7 @@ public class Weapon : Item {
 		GetComponent<Collider> ().isTrigger = false;
 		if (controller.GetHoldingItem ()) {
 			//Debug.Log ("Setting controller invisible");
-			controller.SetControllerVisible (false);
+			//controller.SetControllerVisible (false);
 		} else {
 			//Debug.Log ("Setting controller visible");
 			controller.SetControllerVisible (true);
@@ -208,7 +210,7 @@ public class Weapon : Item {
 		if (holdingController) {
 			otherController = controller;
 			controller.secondaryHoldObject = gameObject;
-			otherController.SetControllerVisible (false);
+			//otherController.SetControllerVisible (false);
 		}
 	}
 

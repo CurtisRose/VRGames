@@ -61,7 +61,7 @@ public class ZombieController : MonoBehaviour {
 						if (Mathf.Abs ((transform.position - obstacle.transform.position).magnitude) < attackDistance) {
 							attacking = true;
 							agent.Stop ();
-							Debug.Log ("Attacking Obstacle");
+							//Debug.Log ("Attacking Obstacle");
 							GetComponent<Animator> ().Play ("attack");
 							if (Time.realtimeSinceStartup - time > attackSpeed) {
 								time = Time.realtimeSinceStartup;

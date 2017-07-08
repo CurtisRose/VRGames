@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
 	public static int levelNumber = 0;
 	static GameController instance;
 	public int numSpawnpoints;
-	public int spawnTime = 20;
+	public int spawnTime;
 	private PlayerController playerController;
 	private static int playerScore;
 	private static int zombiePoints = 100;
@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour {
 	public static bool leftHandMovement = true;
 	private Spawnpoint[] spawnpoints;
 	private SteamVR_ControllerManager controllerManager;
-	public bool startGame = false;
+	public bool startGame;
 
 	public static GameController GetInstance() {
 		if (instance == null) {

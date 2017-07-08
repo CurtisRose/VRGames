@@ -10,14 +10,11 @@ public class GunController : Weapon {
 	public Material onTarget;
 	public Material offTarget;
 
-	float time;
-
-	float rateOfFire = 0.2f;
-
 	bool twoHanded = false;
 
 	// Use this for initialization
 	protected override void Start () {
+		rateOfFire = 0.2f;
 		highlightObject = transform.GetChild (1).gameObject;
 		base.Start ();
 		time = Time.realtimeSinceStartup;

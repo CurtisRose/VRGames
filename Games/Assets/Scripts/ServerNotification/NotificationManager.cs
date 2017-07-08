@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class NotificationManager: MonoBehaviour {
-
+	/*
 	private static NotificationManager instance;
 	private Hashtable notifiers = new Hashtable();
 
@@ -33,4 +33,5 @@ public class NotificationManager: MonoBehaviour {
 			notifier.decode (message);
 		}
 	}
+	*/
 }

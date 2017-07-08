@@ -32,7 +32,7 @@ public class Recoil : MonoBehaviour
             // Dampen towards the target rotation
 			if (gameObject.GetComponent<Weapon>().GetIsHeld()) {
 				//Debug.Log("Test");
-				transform.localRotation = Quaternion.Slerp (transform.localRotation, gameObject.GetComponent<Weapon>().GetGripRotation(), Time.deltaTime * recoilSpeed * 2);
+				transform.localRotation = Quaternion.Slerp (transform.localRotation, gameObject.GetComponent<Weapon>().GetGripRotation(), Time.deltaTime * recoilSpeed * 4);
 			}
         }
     }
