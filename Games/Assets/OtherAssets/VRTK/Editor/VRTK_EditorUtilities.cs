@@ -6,7 +6,7 @@
 
     public class VRTK_EditorUtilities : MonoBehaviour
     {
-        public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride = null)
+        public static GUIContent BuildGUIContent<T>(string fieldName, string displayOverride)
         {
             var displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
             var fieldInfo = typeof(T).GetField(fieldName);
@@ -14,7 +14,7 @@
             return (tooltipAttribute == null ? new GUIContent(displayName) : new GUIContent(displayName, tooltipAttribute.tooltip));
         }
 
-        public static void AddHeader<T>(string fieldName, string displayOverride = null)
+        public static void AddHeader<T>(string fieldName, string displayOverride)
         {
             var displayName = (displayOverride != null ? displayOverride : ObjectNames.NicifyVariableName(fieldName));
             var fieldInfo = typeof(T).GetField(fieldName);

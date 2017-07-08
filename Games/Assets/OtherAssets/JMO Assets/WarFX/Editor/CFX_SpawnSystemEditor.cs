@@ -54,7 +54,7 @@ public class CFX_SpawnSystemEditor : Editor
 	}
 
 	private GUIContent guiContent = new GUIContent();
-	private GUIContent getGuiContent(string label, string tooltip = null)
+	private GUIContent getGuiContent(string label, string tooltip)
 	{
 		guiContent.text = label;
 		guiContent.tooltip = tooltip;

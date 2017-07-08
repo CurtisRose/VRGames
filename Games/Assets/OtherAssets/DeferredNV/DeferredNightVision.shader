@@ -1,4 +1,6 @@
-﻿///A night vision device (NVD) is an optoelectronic device that allows 
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+///A night vision device (NVD) is an optoelectronic device that allows 
 ///images to be produced in levels of light approaching total darkness. 
 ///The image may be a conversion to visible light of both visible light and near-infrared, 
 ///while by convention detection of thermal infrared is denoted thermal imaging. 
@@ -51,7 +53,7 @@ SubShader {
 			v2f vert (appdata_t v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.texcoord = TRANSFORM_TEX(v.texcoord, _MainTex);
 				return o;
 			}

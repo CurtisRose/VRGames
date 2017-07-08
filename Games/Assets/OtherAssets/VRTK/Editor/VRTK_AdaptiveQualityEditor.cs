@@ -40,9 +40,9 @@ namespace VRTK
             EditorGUILayout.PropertyField(serializedObject.FindProperty("msaaLevel"));
 
             EditorGUILayout.Space();
-            serializedObject.FindProperty("scaleRenderViewport").boolValue =
-                EditorGUILayout.BeginToggleGroup(VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("scaleRenderViewport"),
-                                                 adaptiveQuality.scaleRenderViewport);
+            //serializedObject.FindProperty("scaleRenderViewport").boolValue =
+                //EditorGUILayout.BeginToggleGroup(VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("scaleRenderViewport"),
+                //                                 adaptiveQuality.scaleRenderViewport);
             {
                 float minimumRenderScale = adaptiveQuality.minimumRenderScale;
                 float maximumRenderScale = adaptiveQuality.maximumRenderScale;
@@ -83,9 +83,9 @@ namespace VRTK
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("maximumRenderTargetDimension"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("renderScaleFillRateStepSizeInPercent"));
 
-                serializedObject.FindProperty("scaleRenderTargetResolution").boolValue =
-                    EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("scaleRenderTargetResolution"),
-                                           adaptiveQuality.scaleRenderTargetResolution);
+                //serializedObject.FindProperty("scaleRenderTargetResolution").boolValue =
+                    //EditorGUILayout.Toggle(VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("scaleRenderTargetResolution"),
+                    //                       adaptiveQuality.scaleRenderTargetResolution);
                 if (adaptiveQuality.scaleRenderTargetResolution)
                 {
                     EditorGUILayout.HelpBox(ScaleRenderTargetResolutionCostlyHelpBoxText, MessageType.Warning);
@@ -96,7 +96,7 @@ namespace VRTK
 
                 EditorGUI.BeginDisabledGroup(disabled);
                 {
-                    VRTK_EditorUtilities.AddHeader<VRTK_AdaptiveQuality>("overrideRenderViewportScale");
+                    //VRTK_EditorUtilities.AddHeader<VRTK_AdaptiveQuality>("overrideRenderViewportScale");
 
                     if (disabled)
                     {
@@ -108,14 +108,14 @@ namespace VRTK
                     }
 
                     adaptiveQuality.overrideRenderViewportScale = EditorGUILayout.Toggle(
-                        VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderViewportScale"),
+                        //VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderViewportScale"),
                         adaptiveQuality.overrideRenderViewportScale);
 
                     EditorGUI.BeginDisabledGroup(!adaptiveQuality.overrideRenderViewportScale);
                     {
                         adaptiveQuality.overrideRenderViewportScaleLevel =
                             EditorGUILayout.IntSlider(
-                                VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderViewportScaleLevel"),
+                                //VRTK_EditorUtilities.BuildGUIContent<VRTK_AdaptiveQuality>("overrideRenderViewportScaleLevel"),
                                 adaptiveQuality.overrideRenderViewportScaleLevel,
                                 0,
                                 maxRenderScaleLevel);

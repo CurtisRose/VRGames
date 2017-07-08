@@ -972,7 +972,7 @@ public class CFXEasyEditor : EditorWindow
 			psDest.FindProperty("lengthInSec").floatValue = psSource.FindProperty("lengthInSec").floatValue;
 			psDest.FindProperty("moveWithTransform").boolValue = psSource.FindProperty("moveWithTransform").boolValue;
 			
-			GenericModuleCopy(psSource.FindProperty("InitialModule"), psDest.FindProperty("InitialModule"));
+			//GenericModuleCopy(psSource.FindProperty("InitialModule"), psDest.FindProperty("InitialModule"));
 
 #if UNITY_5_5_OR_NEWER
 			var dmain = dest.main;
@@ -1003,7 +1003,7 @@ public class CFXEasyEditor : EditorWindow
 #endif
 		}
 		
-		if(b_modules[1])	GenericModuleCopy(psSource.FindProperty("EmissionModule"), psDest.FindProperty("EmissionModule"));
+		/*if(b_modules[1])	GenericModuleCopy(psSource.FindProperty("EmissionModule"), psDest.FindProperty("EmissionModule"));
 		if(b_modules[2])	GenericModuleCopy(psSource.FindProperty("ShapeModule"), psDest.FindProperty("ShapeModule"));
 		if(b_modules[3])	GenericModuleCopy(psSource.FindProperty("VelocityModule"), psDest.FindProperty("VelocityModule"));
 		if(b_modules[4])	GenericModuleCopy(psSource.FindProperty("ClampVelocityModule"), psDest.FindProperty("ClampVelocityModule"));
@@ -1022,7 +1022,7 @@ public class CFXEasyEditor : EditorWindow
 		if(b_modules[18])	GenericModuleCopy(psSource.FindProperty("LightsModule"), psDest.FindProperty("LightsModule"));
 		if(b_modules[19])	GenericModuleCopy(psSource.FindProperty("NoiseModule"), psDest.FindProperty("NoiseModule"));
 		if(b_modules[20])	GenericModuleCopy(psSource.FindProperty("TrailModule"), psDest.FindProperty("TrailModule"));
-
+*/
 		//Renderer
 		if (b_modules[15])
 		{
@@ -1043,7 +1043,7 @@ public class CFXEasyEditor : EditorWindow
 	}
 	
 	//Copy One Module's Values
-	private void GenericModuleCopy(SerializedProperty ss, SerializedProperty sd, bool depthBreak = true)
+	private void GenericModuleCopy(SerializedProperty ss, SerializedProperty sd, bool depthBreak)
 	{
 		while(true)
 		{
