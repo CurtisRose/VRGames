@@ -47,7 +47,7 @@ public class UMPController : Weapon {
 	public override void OnTouchpadDown(WandController controller, Vector2 touchPosition) {
 		//Debug.Log ("Touchpad Pressed");
 		if (controller.GetObjectInHand() == gameObject) {
-			//gunSounds [0].Play ();
+			gunSounds [0].Play ();
 			if (automatic) {
 				automatic = false;
 			} else {

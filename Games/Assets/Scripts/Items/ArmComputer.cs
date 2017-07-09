@@ -22,7 +22,7 @@ public class ArmComputer : MonoBehaviour {
 		if (!GameController.GetGameOver ()) {
 			text.text = "Zombies left:\t" + GameController.GetNumZombiesLeft () +
 			" \\ " + GameController.GetNumZombiesLevel () + "\nLevel: \t\t\t\t" + GameController.GetLevelNumber () +
-				"\nPlayer score: \t" + GameController.GetPlayerScore () + "\nHealth: \t\t\t" + GameController.GetPlayerHealth();
+			"\nMoney:  \t\t\t$" + GameController.GetPlayerScore () + "\nHealth: \t\t\t" + GameController.GetPlayerHealth();
 		} else {
 			text.text = "GAMEOVER! Your score was: " + GameController.GetPlayerScore ();
 		}

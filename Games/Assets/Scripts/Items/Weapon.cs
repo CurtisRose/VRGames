@@ -199,7 +199,7 @@ public class Weapon : Item {
 		GetComponent<Collider> ().isTrigger = false;
 		if (controller.GetHoldingItem ()) {
 			//Debug.Log ("Setting controller invisible");
-			//controller.SetControllerVisible (false);
+			controller.SetControllerVisible (false);
 		} else {
 			//Debug.Log ("Setting controller visible");
 			controller.SetControllerVisible (true);

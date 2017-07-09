@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
 	public int numSpawnpoints;
 	public int spawnTime;
 	private PlayerController playerController;
-	private static int playerScore;
+	private static int playerScore = 1000;
 	private static int zombiePoints = 100;
 	private static int levelPoints = 0;
 	private static int zombieHealth = 100;
@@ -115,6 +115,14 @@ public class GameController : MonoBehaviour {
 
 	public static int GetPlayerScore() {
 		return playerScore;
+	}
+
+	public static void SetPlayerScore(int newScore) {
+		playerScore = newScore;
+	}
+
+	public static void IncrementPlayerScore(int increment) {
+		playerScore += increment;
 	}
 
 	public static int GetLevelNumber() {
