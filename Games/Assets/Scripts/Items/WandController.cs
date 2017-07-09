@@ -48,11 +48,15 @@ public class WandController : MonoBehaviour {
 		if (other.transform.GetComponent (typeof(Item))) {
 			if (!collidingObject && !objectInHand && !secondaryHoldObject) {
 				if (doNotSetCollidingObject) {
-					//Debug.Log ("Testing");
 					doNotSetCollidingObject = false;
 					SetCollidingObject (null);
 				} else {
 					SetCollidingObject (other.gameObject);
+					if (other.GetComponentInParent<GunSpawn> ()) {
+						Debug.Log ("Began Touching a gun spawn.");
+					} else {
+						Debug.Log ("Didn't touch a gun spawn.");
+					}
 				}
 			}
 		}
@@ -74,6 +78,7 @@ public class WandController : MonoBehaviour {
 			}else if (!collidingObject && !objectInHand && !secondaryHoldObject) {
 				SetCollidingObject (other.gameObject);
 			}
+
 		}
 	}
 
@@ -88,7 +93,11 @@ public class WandController : MonoBehaviour {
 				Item itemScript = other.transform.GetComponent (typeof(Item)) as Item;
 				itemScript.collidingController = null;
 				itemScript.Highlight (false);
+				if (collidingObject.GetComponentInParent<GunSpawn> ()) {
+					Debug.Log ("Stopped touching a gun spawn.");
+				}
 				collidingObject = null;
+
 			}
 		}
 	}

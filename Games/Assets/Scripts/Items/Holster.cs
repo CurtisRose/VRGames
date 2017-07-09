@@ -20,7 +20,7 @@ public class Holster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Transform head = transform.parent.GetChild (3);
+		Transform head = transform.parent.GetComponentInChildren<Camera>().transform;
 		transform.rotation = Quaternion.Euler (new Vector3 (transform.eulerAngles.x, head.eulerAngles.y, transform.eulerAngles.z));
 		transform.localPosition = new Vector3 (head.localPosition.x, head.localPosition.y - .75f, head.localPosition.z);
 	}

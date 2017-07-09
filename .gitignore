@@ -3,8 +3,8 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
-/Assets/AssetStoreTools*
-/Games/Library/metadata*
+/Assets/AssetStoreTools/
+/Games/Library/metadata/
 /Games/Library/ShaderCache*
 
 # Visual Studio 2015 cache directory

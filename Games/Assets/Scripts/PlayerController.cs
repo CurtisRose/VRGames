@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		Vector3 temp = characterController.transform.GetChild (3).transform.localPosition;
+		Vector3 temp = characterController.GetComponentInChildren<Holster>().transform.localPosition;
 		temp.y = characterController.center.y;
 		characterController.center = temp;
 		if (GameController.movementController) {
