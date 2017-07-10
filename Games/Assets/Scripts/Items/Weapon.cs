@@ -15,7 +15,7 @@ public class Weapon : Item {
 	public Holster holster;
 	protected WandController otherController;
 	protected bool primaryWeapon = false;
-	protected int damage = 50;
+	public int damage = 50;
 	protected int headShotMultiplier = 4;
 	public GameObject dirtSpray;
 	public Transform shootPoint;

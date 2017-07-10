@@ -14,6 +14,8 @@ public class WandController : MonoBehaviour {
 	public GameObject objectInHand; // Object held by controller.
 	public GameObject secondaryHoldObject;
 
+	public GameObject collidingEntrance;
+
 	private uint controllerNumber = 0;
 	private bool holdingItem = false;
 
@@ -54,6 +56,10 @@ public class WandController : MonoBehaviour {
 					SetCollidingObject (other.gameObject);
 				}
 			}
+		} else if (other.GetComponent<Entrance> ()) {
+			Debug.Log ("Interacting with an Entrance object.");
+			other.GetComponent<Entrance> ().Highlight (true);
+			setCollidingEntrance (other.gameObject);
 		}
 	}
 
@@ -73,13 +79,17 @@ public class WandController : MonoBehaviour {
 			}else if (!collidingObject && !objectInHand && !secondaryHoldObject) {
 				SetCollidingObject (other.gameObject);
 			}
-
 		}
 	}
 
 	// Removes other as a potential grab target.
 	public void OnTriggerExit(Collider other) {
-		if (!collidingObject) {
+		if (other.GetComponent<Entrance> ()) {
+			Debug.Log ("Stopped interacting with an Entrance object.");
+			other.GetComponent<Entrance> ().Highlight (false);
+			setCollidingEntrance (null);
+		}
+		else if (!collidingObject) {
 			//Debug.Log ("Error");
 			return;
 		}
@@ -90,7 +100,7 @@ public class WandController : MonoBehaviour {
 				itemScript.Highlight (false);
 				collidingObject = null;
 			}
-		}
+		} 
 	}
 
 	public bool IsAvailable() {
@@ -120,6 +130,10 @@ public class WandController : MonoBehaviour {
 			collidingObject = null;
 		}
 	}
+
+	public void setCollidingEntrance(GameObject entrance) {
+		collidingEntrance = entrance;
+	}
 		
 	// Update is called once per frame
 	void Update () {
@@ -143,13 +157,12 @@ public class WandController : MonoBehaviour {
 				objectInHandScript.OnTriggerUp (controllerScript);
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Touchpad)) {
-				objectInHandScript.OnTouchpadDown (controllerScript, controller.GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad));
+				objectInHandScript.OnTouchpadDown (controllerScript, controller.GetAxis (Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad));
 			}
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
 				objectInHandScript.OnMenuDown (controllerScript);
 			}
-		}
-		else if (collidingObject) {
+		} else if (collidingObject) {
 			Item objectInHandScript = collidingObject.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				objectInHandScript.OnGripDown (controllerScript);
@@ -160,11 +173,14 @@ public class WandController : MonoBehaviour {
 			if (controller.GetPress (SteamVR_Controller.ButtonMask.Trigger)) {
 				objectInHandScript.OnTriggerHeld (controllerScript);
 			}
-		}
-		else if(secondaryHoldObject) {
+		} else if (secondaryHoldObject) {
 			Item secondaryHoldObjectScript = secondaryHoldObject.GetComponent (typeof(Item)) as Item;
 			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Grip)) {
 				secondaryHoldObjectScript.OnGripDown (controllerScript);
+			}
+		} else if (collidingEntrance) {
+			if (controller.GetPressDown (SteamVR_Controller.ButtonMask.Trigger)) {
+				collidingEntrance.GetComponent<Entrance>().OnTriggerDown (controllerScript);
 			}
 		}
 		if (controller.GetPressDown (SteamVR_Controller.ButtonMask.ApplicationMenu)) {
