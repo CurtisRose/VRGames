@@ -1,19 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class GunSpawn : MonoBehaviour {
 	public GameObject itemToSpawn;
 	public int gunCost;
+	public Vector3 position;
 	public Vector3 rotation;
-	TextMesh cost;
+	TextMeshPro test;
 
 
 	// Use this for initialization
 	void Start () {
-		cost = GetComponentInChildren<TextMesh> ();
-		cost.text = "$" + gunCost;
+		test = GetComponentInChildren<TextMeshPro> ();
+		test.text = "$" + gunCost;
 	}
 	
 	// Update is called once per frame
@@ -23,9 +24,9 @@ public class GunSpawn : MonoBehaviour {
 				itemToSpawn,
 				transform.position,
 				Quaternion.Euler(transform.rotation.eulerAngles + rotation));
-			
 			item.GetComponent<Rigidbody> ().isKinematic = true;
 			item.transform.parent = transform;
+			item.transform.localPosition += position;
 			if (item.GetComponent<Weapon> ()) {
 				item.GetComponent<Weapon> ().numBullets = 0;
 			}
