@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Level 1/PremadeZombieMap.unity
+- path: Assets/Scenes/Level 1/ActualMap.unity
   isLoaded: 1
   isActive: 1

@@ -88,5 +88,6 @@ C:\Users\TsNRe\VRGames\Games\Temp\bin\Debug\nunit.framework.xml
 C:\Users\TsNRe\VRGames\Games\Temp\bin\Debug\UnityEngine.Analytics.xml
 C:\Users\TsNRe\VRGames\Games\Temp\bin\Debug\UnityEngine.HoloLens.xml
 C:\Users\TsNRe\VRGames\Games\Temp\bin\Debug\UnityEngine.VR.xml
+C:\Users\TsNRe\VRGames\Games\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\TsNRe\VRGames\Games\obj\Debug\Assembly-CSharp.dll
 C:\Users\TsNRe\VRGames\Games\obj\Debug\Assembly-CSharp.pdb

@@ -60,13 +60,6 @@ public class Weapon : Item {
 					hit.collider.gameObject.SetActive (false);
 					ZombieController zombie = hit.collider.gameObject.GetComponentInParent<ZombieController> ();
 					zombie.DoDamage (damage);
-				} else if (hit.collider.gameObject.CompareTag ("Target")) {
-					GameObject spray = Instantiate (
-						dirtSpray,
-						hit.point,
-						Quaternion.Euler(0,0,0));
-					spray.GetComponent<ParticleSystem> ().Play ();
-					hit.collider.gameObject.GetComponentInParent<Target> ().SwitchColors ();
 				} else if (hit.collider) {
 					//Debug.Log ("Spray dirt");
 					GameObject spray = Instantiate (

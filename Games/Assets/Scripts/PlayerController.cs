@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
 	AudioSource[] playerSounds;
 	PlayerController instance;
 
-	public float maxWalkSpeed = 3f;
+	public float maxWalkSpeed = 5f;
 	public float deceleration = 0.1f;
 	private float movementSpeed = 0f;
 	private float strafeSpeed = 0f;

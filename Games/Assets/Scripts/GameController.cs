@@ -7,7 +7,6 @@ public class GameController : MonoBehaviour {
 	public static int numZombiesLevel;
 	public static int levelNumber = 0;
 	static GameController instance;
-	public int numSpawnpoints;
 	public int spawnTime;
 	private PlayerController playerController;
 	private static int playerScore = 10000;
@@ -40,7 +39,6 @@ public class GameController : MonoBehaviour {
 		// Do not display cursor
 		Cursor.visible = false;
 		spawnpoints = GetComponentsInChildren<Spawnpoint> ();
-		numSpawnpoints = spawnpoints.Length;
 		//playerController = PlayerController.GetInstance ();
 		controllerManager = GetComponentInChildren<SteamVR_ControllerManager>();
 		if (controllerManager.left) {
@@ -77,8 +75,8 @@ public class GameController : MonoBehaviour {
 		levelPoints += 100;
 		//playerController.DisplayLevel (levelNumber);
 		Debug.Log ("Starting Level " + levelNumber + " Now");
-		numZombies = numSpawnpoints + numZombiesLevel;
-		numZombiesLevel = numSpawnpoints + numZombiesLevel;
+		numZombies = spawnpoints.Length + numZombiesLevel;
+		numZombiesLevel = spawnpoints.Length + numZombiesLevel;
 		foreach (Spawnpoint point in spawnpoints) {
 			point.target = GetComponentInChildren<PlayerController> ().transform.GetChild (0).GetChild (2).transform;
 			point.PrepareSpawning (levelNumber, spawnTime, zombieHealth);

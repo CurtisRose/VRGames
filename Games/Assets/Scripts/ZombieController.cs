@@ -11,7 +11,9 @@ public class ZombieController : MonoBehaviour {
 	private GameController gameController;
 	AudioSource[] zombieSounds;
 	int damage = 10;
+	int obstacleDamage = 1;
 	float attackDistance = 2.0f;
+	float obstacleAttackDistance = 3.0f;
 	float time;
 	float attackSpeed = 1.5f;
 	NavMeshPath path = null;
@@ -25,6 +27,7 @@ public class ZombieController : MonoBehaviour {
 		zombieSounds = GetComponents<AudioSource> ();
 		time = Time.realtimeSinceStartup;
 		path = new NavMeshPath ();
+		GetComponent<Animator> ().speed += Random.Range (0, 5)/100f;
 	}
 
 	/*void OnCollisionEnter(Collision col) {
@@ -55,10 +58,10 @@ public class ZombieController : MonoBehaviour {
 			//Debug.Log ("====================");
 			if ((agent.pathEndPosition.magnitude - pathLocation.magnitude) < attackDistance && agent.CalculatePath (pathLocation, path)) {
 				//Debug.Log ("Following path to player");
-				if (Mathf.Abs ((agent.transform.position - pathLocation).magnitude) > attackDistance) {
-					bool attacking = false;
-					foreach (Obstacle obstacle in GameObject.FindObjectsOfType<Obstacle>()) {
-						if (Mathf.Abs ((transform.position - obstacle.transform.position).magnitude) < attackDistance) {
+				bool attacking = false;
+				foreach (Obstacle obstacle in GameObject.FindObjectsOfType<Obstacle>()) {
+					if (Mathf.Abs ((transform.position - obstacle.transform.position).magnitude) < obstacleAttackDistance) {
+						if (!obstacle.destroyed) {
 							attacking = true;
 							agent.Stop ();
 							//Debug.Log ("Attacking Obstacle");
@@ -66,10 +69,12 @@ public class ZombieController : MonoBehaviour {
 							if (Time.realtimeSinceStartup - time > attackSpeed) {
 								time = Time.realtimeSinceStartup;
 								//Debug.Log ("Doing Damage to Obstacle");
-								obstacle.GetComponent<Obstacle> ().Damage (damage);
+								obstacle.GetComponent<Obstacle> ().Damage (obstacleDamage);
 							}
 						}
 					}
+				}
+				if (Mathf.Abs ((agent.transform.position - pathLocation).magnitude) > attackDistance) {
 					if (!attacking) {
 						//Debug.Log ("Walking");
 						GetComponent<Animator> ().Play ("walk");
